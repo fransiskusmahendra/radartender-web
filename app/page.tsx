@@ -80,7 +80,7 @@ export default function HomePage() {
       // Check URL query parameters for instant 1-click activation from WhatsApp
       if (typeof window !== "undefined") {
         const params = new URLSearchParams(window.location.search);
-        const code = params.get("activate") || params.get("code");
+        const code = params.get("token") || params.get("activate") || params.get("code");
 
         if (code) {
           const clean = code.trim().toUpperCase();

@@ -145,9 +145,9 @@ export function curateTendersForSubscriber(
   });
 
   msg += `━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`;
-  msg += `🌐 *Buka Seluruh 500+ Lelang Lainnya se-Indonesia:*\n`;
-  msg += `Akses dashboard lengkap dengan Akun PRO Anda:\n`;
-  msg += `👉 https://radartender.id?activate=${subscriber.orderId || "PRO"}\n\n`;
+  msg += `💻 *Portal Tender Lengkap (500+ Proyek Aktif Hari Ini):*\n`;
+  msg += `Buka dashboard lelang Anda (Akses Langsung Tanpa Login):\n`;
+  msg += `👉 https://radartender.id?token=${subscriber.orderId || "PRO"}\n\n`;
   msg += `🛡️ *Butuh Jaminan Penawaran (Bid Bond) Express Proyek di Atas?*\n`;
   msg += `Balas chat ini atau hubungi underwriter prioritas kami:\n`;
   msg += `👉 https://wa.me/628211076517?text=Halo%20Admin%20RadarTender%2C%20saya%20ingin%20mengajukan%20Bid%20Bond%20untuk%20tender%20terkurasi%20hari%20ini`;

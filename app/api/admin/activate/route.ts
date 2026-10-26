@@ -45,7 +45,7 @@ _Akun telah aktif sebagai PRO. Kontraktor sudah dapat mengakses seluruh lelang &
     const curation = curateTendersForSubscriber(record, getEnrichedTenders());
 
     // WhatsApp combined welcome & curated tender message for Ko Mahen
-    const combinedMessage = `Halo Pak/Bu dari ${record.vendorName},\nPembayaran langganan RadarTender.id Anda telah kami verifikasi! ✅\n\nAkun Anda kini aktif sebagai *PRO MEMBER* (Order ID: ${record.orderId}) hingga *${expiresFormatted}*.\n\nKlik link berikut untuk membuka akses instan di perangkat Anda:\n👉 https://radartender.id?activate=${record.orderId}\n\n${curation.whatsappMessage}`;
+    const combinedMessage = `Halo Pak/Bu dari ${record.vendorName},\nPembayaran langganan RadarTender.id Anda telah kami verifikasi! ✅\n\nAkun Anda kini aktif sebagai *PRO MEMBER* (Order ID: ${record.orderId}) hingga *${expiresFormatted}*.\n\nKlik link berikut untuk membuka akses instan di perangkat Anda:\n👉 https://radartender.id?token=${record.orderId}\n\n${curation.whatsappMessage}`;
     const waUrl = `https://wa.me/${record.whatsapp}?text=${encodeURIComponent(combinedMessage)}`;
 
     const html = `<!DOCTYPE html>
