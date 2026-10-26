@@ -16,13 +16,15 @@ export async function POST(req: Request) {
     } = body;
 
     const leadId = `SB-${Date.now().toString(36).toUpperCase()}`;
+    const rawWa = (whatsapp || "").replace(/[^0-9]/g, "");
+    const waClean = rawWa.startsWith("0") ? `62${rawWa.slice(1)}` : rawWa;
 
     const message = `🛡️ *PENGAJUAN PENJAMINAN PROYEK: RADARTENDER.ID*
 ━━━━━━━━━━━━━━━━━━━━
 📌 *Ref ID:* \`${leadId}\`
 🏢 *Perusahaan (Principal):* ${companyName}
 👤 *Contact Person:* ${contactPerson}
-📱 *WhatsApp:* [https://wa.me/${(whatsapp || "").replace(/[^0-9]/g, "")}](${whatsapp})
+📱 *WhatsApp:* [Klik Chat Kontraktor](https://wa.me/${waClean}) (\`${whatsapp}\`)
 🏛️ *Obligee / Pemilik Proyek:* ${obligeeName || "-"}
 📑 *Jenis Jaminan:* *${guaranteeType}*
 💵 *Nilai Proyek (HPS):* Rp ${Number(projectValue || 0).toLocaleString("id-ID")}

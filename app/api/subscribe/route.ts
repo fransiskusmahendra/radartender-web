@@ -22,6 +22,8 @@ export async function POST(req: Request) {
     });
 
     const activateUrl = `https://radartender.id/api/admin/activate?orderId=${orderId}&token=${subscription.token}`;
+    const rawVendorWa = (vendorWa || "").replace(/[^0-9]/g, "");
+    const waVendorClean = rawVendorWa.startsWith("0") ? `62${rawVendorWa.slice(1)}` : rawVendorWa;
 
     const message = `🔔 *ORDER LANGGANAN BARU: RADARTENDER.ID*
 ━━━━━━━━━━━━━━━━━━━━
@@ -30,7 +32,7 @@ export async function POST(req: Request) {
 💰 *Nominal Transfer:* *Rp ${Number(finalAmount).toLocaleString("id-ID")}*
 🏦 *Tujuan Bayar:* Bank BCA \`4210122848\` a/n Fransiskus Xaverius Mahendra Kotualubun
 🏢 *Perusahaan / PT:* ${vendorName || "-"}
-📱 *WhatsApp:* [https://wa.me/${(vendorWa || "").replace(/[^0-9]/g, "")}](${vendorWa || "-"})
+📱 *WhatsApp:* [Klik Chat Customer](https://wa.me/${waVendorClean}) (\`${vendorWa || "-"}\`)
 📧 *Email:* ${email || "-"}
 🏷️ *Kluster Fokus:* ${cluster || "Semua"}
 ⏰ *Waktu:* ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })} WIB

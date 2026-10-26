@@ -29,7 +29,7 @@ export function ComplianceNotice() {
                 Platform Software Intelijen
               </div>
               <p className="text-slate-400">
-                RadarTender.id adalah platform SaaS intelijen data tender independen yang dikembangkan dan dioperasikan oleh <strong>CV. QIRA Solusi Digital</strong> untuk memantau pengumuman lelang terbuka pemerintah dan BUMN.
+                RadarTender.id adalah platform SaaS intelijen data tender independen yang dikembangkan dan dioperasikan oleh <strong>RadarTender Indonesia</strong> untuk memantau pengumuman lelang terbuka pemerintah dan BUMN se-Indonesia.
               </p>
             </div>
 

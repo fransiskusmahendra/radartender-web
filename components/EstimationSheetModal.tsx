@@ -206,7 +206,7 @@ export function EstimationSheetModal({ isOpen, onClose, data }: EstimationSheetM
           {/* Legal Disclaimer Footer */}
           <div className="pt-4 border-t border-slate-200 text-[10px] text-slate-500 leading-relaxed">
             <p>
-              *Simulasi ini diterbitkan oleh RadarTender.id (CV QIRA Solusi Digital). Penerbitan polis jaminan difasilitasi melalui Perusahaan Asuransi Umum &amp; Bank Devisa berizin resmi yang terdaftar dan diawasi oleh OJK dan Bank Indonesia. Bebas dari praktik rebating ilegal.
+              *Simulasi ini diterbitkan secara otomatis oleh sistem RadarTender.id. Penerbitan polis jaminan difasilitasi melalui Perusahaan Asuransi Umum &amp; Bank Devisa berizin resmi yang terdaftar dan diawasi oleh OJK dan Bank Indonesia. Bebas dari praktik rebating ilegal.
             </p>
           </div>
         </div>

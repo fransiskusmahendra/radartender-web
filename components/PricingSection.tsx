@@ -196,7 +196,7 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                 Gratis Akses RadarTender.id 1 Tahun dengan Fasilitas Penjaminan Proyek
               </h4>
               <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-                Bila perusahaan Anda menerbitkan Jaminan Proyek (Surety Bond atau Bank Garansi) melalui jaringan agensi rekanan kami, seluruh biaya langganan RadarTender.id selama 1 tahun akan <strong>dibebaskan (Rp 0 / Gratis)</strong> sebagai fasilitas bundling IT dari CV QIRA Solusi Digital.
+                Bila perusahaan Anda menerbitkan Jaminan Proyek (Surety Bond atau Bank Garansi) melalui jaringan agensi rekanan kami, seluruh biaya langganan RadarTender.id selama 1 tahun akan <strong>dibebaskan (Rp 0 / Gratis)</strong> sebagai fasilitas bundling eksklusif dari tim RadarTender.id.
               </p>
             </div>
           </div>
