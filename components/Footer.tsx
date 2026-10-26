@@ -31,7 +31,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="font-bold text-amber-400 hover:underline flex items-center gap-1"
                 >
-                  Qira
+                  Qira Solution
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
