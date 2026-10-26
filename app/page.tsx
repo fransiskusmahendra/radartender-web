@@ -53,6 +53,7 @@ export default function HomePage() {
     tenderTitle?: string;
     tenderCode?: string;
     obligeeName?: string;
+    sourceUrl?: string;
   }>({});
 
   const [isEstimationModalOpen, setIsEstimationModalOpen] = useState(false);
@@ -161,6 +162,7 @@ export default function HomePage() {
       tenderTitle: tender.title,
       tenderCode: tender.tender_code,
       obligeeName: tender.agency_name,
+      sourceUrl: tender.source_url,
     });
     setIsSuretyModalOpen(true);
   };

@@ -24,8 +24,16 @@ export function Footer() {
             </p>
             <div className="pt-2">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300">
-                <span className="text-amber-400 font-bold">⚡ RadarTender.id</span>
-                <span>— Platform Intelijen Pengadaan &amp; Asistensi Jaminan Proyek Nasional</span>
+                <span>⚡ Engineered &amp; Managed by</span>
+                <a
+                  href="https://www.qirasolution.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-bold text-amber-400 hover:underline flex items-center gap-1"
+                >
+                  Qira
+                  <ExternalLink className="w-3 h-3" />
+                </a>
               </div>
             </div>
           </div>

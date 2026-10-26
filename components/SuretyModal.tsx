@@ -38,6 +38,7 @@ interface SuretyModalProps {
     tenderTitle?: string;
     tenderCode?: string;
     obligeeName?: string;
+    sourceUrl?: string;
   };
 }
 
@@ -166,11 +167,17 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
       );
     } catch (e) {}
 
-    // Prepare document inventory summary
+    // Prepare document inventory summary (auto-link selected LPSE tender docs if bid bond)
+    let tenderDocsList = tenderDocs.map((f) => `${f.name} (${formatFileSize(f.size)})`);
+    if (initialData?.tenderTitle) {
+      const autoLinkEntry = `[Auto-Link LPSE] ${initialData.tenderCode ? '[' + initialData.tenderCode + '] ' : ''}${initialData.tenderTitle}${initialData.sourceUrl ? ' (' + initialData.sourceUrl + ')' : ''}`;
+      tenderDocsList = [autoLinkEntry, ...tenderDocsList];
+    }
+
     const uploadedDocsSummary = {
       legalDocs: legalDocs.map((f) => `${f.name} (${formatFileSize(f.size)})`),
       financialDocs: financialDocs.map((f) => `${f.name} (${formatFileSize(f.size)})`),
-      tenderDocs: tenderDocs.map((f) => `${f.name} (${formatFileSize(f.size)})`),
+      tenderDocs: tenderDocsList,
       companyProfileDoc: companyProfileDoc.map((f) => `${f.name} (${formatFileSize(f.size)})`),
       driveUrl: driveUrl.trim(),
     };
@@ -536,12 +543,29 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                         Dokumen Tender / RKS
                       </span>
                       <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-semibold">
-                        Wajib
+                        {initialData?.tenderTitle ? "Tersinkronisasi" : "Wajib"}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-400 mb-3 leading-snug">
-                      Dokumen Pemilihan/RKS/Pengumuman LPSE (untuk Bid Bond) atau SPPBJ / Kontrak (untuk Perf Bond).
-                    </p>
+
+                    {/* Auto-Linked from LPSE if tender is selected */}
+                    {initialData?.tenderTitle ? (
+                      <div className="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/25 mb-3">
+                        <div className="flex items-center gap-1.5 text-emerald-300 font-bold text-[11px] mb-0.5">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                          <span>Tersinkronisasi Otomatis dari Portal LPSE</span>
+                        </div>
+                        <div className="text-[11px] text-slate-200 font-medium truncate">
+                          {initialData.tenderCode ? `[${initialData.tenderCode}] ` : ""}{initialData.tenderTitle}
+                        </div>
+                        <p className="text-[10px] text-slate-400 mt-1 leading-snug">
+                          Dokumen pengumuman &amp; syarat lelang resmi terhubung langsung ke underwriter melalui link LPSE. Anda tidak perlu mengunggah ulang file RKS.
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-[11px] text-slate-400 mb-3 leading-snug">
+                        Dokumen Pemilihan/RKS/Pengumuman LPSE (untuk Bid Bond) atau SPPBJ / Kontrak (untuk Perf Bond).
+                      </p>
+                    )}
 
                     <input
                       ref={tenderInputRef}
@@ -558,7 +582,9 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                       className="w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-slate-850 border border-dashed border-slate-700 hover:border-emerald-500 text-xs text-slate-300 flex items-center justify-center gap-2 transition"
                     >
                       <UploadCloud className="w-4 h-4 text-emerald-400" />
-                      Pilih Dokumen Tender / Kontrak
+                      {initialData?.tenderTitle
+                        ? "+ Tambah Dokumen / Addendum (Opsional)"
+                        : "Pilih Dokumen Tender / Kontrak"}
                     </button>
 
                     {tenderDocs.length > 0 && (
