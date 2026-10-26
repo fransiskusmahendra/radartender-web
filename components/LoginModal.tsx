@@ -9,6 +9,7 @@ interface UserProfile {
   whatsapp: string;
   email?: string;
   isPro?: boolean;
+  activationCode?: string;
 }
 
 interface LoginModalProps {

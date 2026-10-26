@@ -69,27 +69,29 @@ export default function HomePage() {
       let currentProfile: UserProfile | null = saved ? JSON.parse(saved) : null;
 
       // Check URL query parameters for instant 1-click activation from WhatsApp
-      const params = new URLSearchParams(window.location.search);
-      const code = params.get("activate") || params.get("code");
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        const code = params.get("activate") || params.get("code");
 
-      if (code) {
-        const clean = code.trim().toUpperCase();
-        if (
-          clean.startsWith("RT-") ||
-          clean === "PRO" ||
-          clean === "RADARPRO" ||
-          clean === "QIRA-PRO" ||
-          clean.startsWith("VIP")
-        ) {
-          currentProfile = {
-            companyName: currentProfile?.companyName || "Perusahaan Kontraktor",
-            contactPerson: currentProfile?.contactPerson || "",
-            whatsapp: currentProfile?.whatsapp || "",
-            isPro: true,
-            activationCode: clean,
-          };
-          localStorage.setItem("radartender_user_profile", JSON.stringify(currentProfile));
-          setShowCelebration(true);
+        if (code) {
+          const clean = code.trim().toUpperCase();
+          if (
+            clean.startsWith("RT-") ||
+            clean === "PRO" ||
+            clean === "RADARPRO" ||
+            clean === "QIRA-PRO" ||
+            clean.startsWith("VIP")
+          ) {
+            currentProfile = {
+              companyName: currentProfile?.companyName || "Perusahaan Kontraktor",
+              contactPerson: currentProfile?.contactPerson || "",
+              whatsapp: currentProfile?.whatsapp || "",
+              isPro: true,
+              activationCode: clean,
+            };
+            localStorage.setItem("radartender_user_profile", JSON.stringify(currentProfile));
+            setShowCelebration(true);
+          }
         }
       }
 
