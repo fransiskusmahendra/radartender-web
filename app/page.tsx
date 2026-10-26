@@ -15,13 +15,17 @@ import { EstimationSheetModal } from "@/components/EstimationSheetModal";
 import { EnrichedTenderItem } from "@/lib/tenders-data";
 import { Crown, CheckCircle2, Sparkles, X } from "lucide-react";
 
-interface UserProfile {
+export interface UserProfile {
   companyName: string;
   contactPerson: string;
   whatsapp: string;
   email?: string;
   isPro?: boolean;
   activationCode?: string;
+  planTitle?: string;
+  daysRemaining?: number;
+  expiresAt?: string;
+  orderId?: string;
 }
 
 export default function HomePage() {
@@ -96,6 +100,34 @@ export default function HomePage() {
       }
 
       setUserProfile(currentProfile);
+
+      // Silent cloud verification to keep daysRemaining and expiry up to date
+      if (currentProfile && (currentProfile.whatsapp || currentProfile.activationCode)) {
+        fetch("/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            whatsapp: currentProfile.whatsapp,
+            accessCode: currentProfile.activationCode,
+          }),
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            if (data.success && data.user) {
+              const updated: UserProfile = {
+                ...currentProfile!,
+                isPro: Boolean(data.isPro),
+                planTitle: data.user.planTitle || currentProfile?.planTitle,
+                daysRemaining: data.daysRemaining,
+                expiresAt: data.user.expiresAt || currentProfile?.expiresAt,
+                orderId: data.user.orderId || currentProfile?.orderId,
+              };
+              setUserProfile(updated);
+              localStorage.setItem("radartender_user_profile", JSON.stringify(updated));
+            }
+          })
+          .catch(() => {});
+      }
     } catch (e) {}
   }, []);
 

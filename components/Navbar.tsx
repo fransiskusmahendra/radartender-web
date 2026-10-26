@@ -4,13 +4,17 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Radar, ShieldCheck, User, Crown, Menu, X } from "lucide-react";
 
-interface UserProfile {
+export interface UserProfile {
   companyName: string;
   contactPerson: string;
   whatsapp: string;
   email?: string;
   isPro?: boolean;
   activationCode?: string;
+  planTitle?: string;
+  daysRemaining?: number;
+  expiresAt?: string;
+  orderId?: string;
 }
 
 interface NavbarProps {

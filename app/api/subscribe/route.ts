@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { sendTelegramNotification } from "@/lib/telegram";
+import { createSubscription } from "@/lib/subscription-db";
 
 export async function POST(req: Request) {
   try {
@@ -8,6 +9,19 @@ export async function POST(req: Request) {
 
     const finalAmount = uniqueAmount || price;
     const orderId = `RT-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+
+    // Create record in cloud database
+    const subscription = createSubscription({
+      orderId,
+      vendorName,
+      whatsapp: vendorWa,
+      email,
+      plan: plan || "pro",
+      planTitle: planTitle || "Pro Kontraktor",
+      amount: finalAmount,
+    });
+
+    const activateUrl = `https://radartender.id/api/admin/activate?orderId=${orderId}&token=${subscription.token}`;
 
     const message = `🔔 *ORDER LANGGANAN BARU: RADARTENDER.ID*
 ━━━━━━━━━━━━━━━━━━━━
@@ -21,7 +35,10 @@ export async function POST(req: Request) {
 🏷️ *Kluster Fokus:* ${cluster || "Semua"}
 ⏰ *Waktu:* ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })} WIB
 ━━━━━━━━━━━━━━━━━━━━
-_Instruksi pembayaran BCA & QRIS telah disajikan ke customer. Menunggu konfirmasi transfer via WhatsApp._`;
+⚡ *Tombol Verifikasi & Aktivasi (1-Klik):*
+${activateUrl}
+━━━━━━━━━━━━━━━━━━━━
+_Setelah mutasi BCA masuk, klik link di atas untuk langsung mengaktifkan akun PRO kontraktor secara otomatis._`;
 
     await sendTelegramNotification(message);
 
