@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "RadarTender.id — Intelijen Tender Pengadaan & Penjaminan Proyek (Surety Bond)",
+  metadataBase: new URL("https://radartender.id"),
+  title: "RadarTender.id — Intelijen Pengadaan & Jaminan Proyek (Surety Bond)",
   description:
-    "Pantau lelang LPSE & BUMN se-Indonesia dengan hitung mundur batas upload dan fasilitas penerbitan Surety Bond & Bank Garansi resmi berizin OJK.",
+    "Pantau lelang proyek LPSE & BUMN se-Indonesia dengan hitung mundur batas upload dokumen, serta simulasi instan Jaminan Penawaran & Pelaksanaan (Surety Bond).",
   keywords: [
     "Radar Tender",
     "Tender LPSE",
@@ -14,16 +15,23 @@ export const metadata: Metadata = {
     "Jaminan Penawaran",
     "Jaminan Pelaksanaan",
     "Pengadaan Barang dan Jasa",
+    "LKPP",
   ],
   authors: [{ name: "CV QIRA Solusi Digital", url: "https://www.qirasolution.com" }],
   openGraph: {
-    title: "RadarTender.id — Intelijen Pengadaan & Penjaminan Proyek",
+    title: "RadarTender.id — Intelijen Pengadaan & Kalkulator Jaminan Proyek",
     description:
-      "Pantau lelang proyek miliaran rupiah dan dapatkan asistensi penerbitan jaminan tender (Surety Bond & Bank Garansi) express.",
+      "Pantau lelang LPSE & BUMN bernilai miliaran rupiah dengan hitung mundur batas penawaran serta asistensi penerbitan Surety Bond express.",
     url: "https://radartender.id",
     siteName: "RadarTender.id",
     locale: "id_ID",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "RadarTender.id — Intelijen Pengadaan & Jaminan Proyek",
+    description:
+      "Pantau lelang LPSE & BUMN se-Indonesia dengan hitung mundur batas dokumen dan kalkulator Surety Bond instan.",
   },
 };
 

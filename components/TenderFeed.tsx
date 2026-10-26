@@ -20,6 +20,7 @@ import {
   Zap,
   MessageCircle,
   Crown,
+  FileText,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -28,6 +29,17 @@ const CATEGORIES = [
   "Pengadaan Barang",
   "Jasa Konsultansi",
   "Jasa Lainnya",
+];
+
+const REGIONS = [
+  "Semua Wilayah",
+  "IKN & Kalimantan",
+  "DKI Jakarta",
+  "Jawa Timur",
+  "Jawa Barat",
+  "Jawa Tengah",
+  "Sumatera",
+  "Sulawesi",
 ];
 
 const URGENCIES = [
@@ -48,10 +60,17 @@ interface TenderFeedProps {
   onSelectTenderForSurety: (tender: EnrichedTenderItem) => void;
   isPro?: boolean;
   onOpenSubscribe: () => void;
+  onOpenEstimationModal: (data: any) => void;
 }
 
-export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: TenderFeedProps) {
+export function TenderFeed({
+  onSelectTenderForSurety,
+  isPro,
+  onOpenSubscribe,
+  onOpenEstimationModal,
+}: TenderFeedProps) {
   const [selectedCategory, setSelectedCategory] = useState("Semua Kluster");
+  const [selectedRegion, setSelectedRegion] = useState("Semua Wilayah");
   const [selectedUrgency, setSelectedUrgency] = useState("Semua Waktu");
   const [selectedHps, setSelectedHps] = useState("Semua Nilai Proyek");
   const [searchQuery, setSearchQuery] = useState("");
@@ -63,6 +82,26 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
       // Category match
       const matchCat =
         selectedCategory === "Semua Kluster" || item.procurement_type === selectedCategory;
+
+      // Region match
+      let matchReg = true;
+      if (selectedRegion !== "Semua Wilayah") {
+        if (selectedRegion === "IKN & Kalimantan") {
+          matchReg = item.location.toLowerCase().includes("ikn") || item.location.toLowerCase().includes("kaltim");
+        } else if (selectedRegion === "DKI Jakarta") {
+          matchReg = item.location.toLowerCase().includes("jakarta");
+        } else if (selectedRegion === "Jawa Timur") {
+          matchReg = item.location.toLowerCase().includes("jawa timur") || item.location.toLowerCase().includes("surabaya");
+        } else if (selectedRegion === "Jawa Barat") {
+          matchReg = item.location.toLowerCase().includes("jawa barat") || item.location.toLowerCase().includes("bandung");
+        } else if (selectedRegion === "Jawa Tengah") {
+          matchReg = item.location.toLowerCase().includes("jawa tengah") || item.location.toLowerCase().includes("semarang");
+        } else if (selectedRegion === "Sumatera") {
+          matchReg = item.location.toLowerCase().includes("sumatera") || item.location.toLowerCase().includes("padang");
+        } else if (selectedRegion === "Sulawesi") {
+          matchReg = item.location.toLowerCase().includes("sulawesi") || item.location.toLowerCase().includes("makassar");
+        }
+      }
 
       // Urgency match
       let matchUrg = true;
@@ -92,9 +131,9 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
         item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.tender_code.toLowerCase().includes(searchQuery.toLowerCase());
 
-      return matchCat && matchUrg && matchHps && matchSearch;
+      return matchCat && matchReg && matchUrg && matchHps && matchSearch;
     });
-  }, [tendersData, selectedCategory, selectedUrgency, selectedHps, searchQuery]);
+  }, [tendersData, selectedCategory, selectedRegion, selectedUrgency, selectedHps, searchQuery]);
 
   const totalHpsSum = useMemo(() => {
     return filteredTenders.reduce((acc, curr) => acc + curr.hps_value, 0);
@@ -128,7 +167,7 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
             className="shrink-0 px-4 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-md shadow-emerald-500/20 flex items-center gap-1.5"
           >
             <Zap className="w-3.5 h-3.5" />
-            Aktifkan Alert WhatsApp (Mulai Rp 83rb/bln)
+            Aktifkan Alert WhatsApp (Mulai Rp 66rb/bln)
           </button>
         </div>
 
@@ -154,19 +193,34 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
           </div>
         </div>
 
-        {/* Filter Toolbar */}
+        {/* Filter Toolbar (5 Columns including Region) */}
         <div className="p-4 sm:p-6 rounded-2xl bg-slate-900 border border-slate-800 mb-10 shadow-lg">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {/* Search Input */}
-            <div className="relative">
+            <div className="relative lg:col-span-1 sm:col-span-2">
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3.5" />
               <input
                 type="text"
-                placeholder="Cari lelang, kota, instansi..."
+                placeholder="Cari kata kunci..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500 placeholder:text-slate-500"
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-500 placeholder:text-slate-500"
               />
+            </div>
+
+            {/* Region Filter */}
+            <div>
+              <select
+                value={selectedRegion}
+                onChange={(e) => setSelectedRegion(e.target.value)}
+                className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-500"
+              >
+                {REGIONS.map((reg) => (
+                  <option key={reg} value={reg}>
+                    📍 {reg}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Category Filter */}
@@ -174,7 +228,7 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-500"
               >
                 {CATEGORIES.map((cat) => (
                   <option key={cat} value={cat}>
@@ -189,7 +243,7 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
               <select
                 value={selectedUrgency}
                 onChange={(e) => setSelectedUrgency(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-500"
               >
                 {URGENCIES.map((urg) => (
                   <option key={urg} value={urg}>
@@ -204,7 +258,7 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
               <select
                 value={selectedHps}
                 onChange={(e) => setSelectedHps(e.target.value)}
-                className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500"
+                className="w-full px-3 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-500"
               >
                 {HPS_RANGES.map((hps) => (
                   <option key={hps} value={hps}>
@@ -222,7 +276,7 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
             <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto mb-3" />
             <h3 className="text-lg font-bold text-white mb-1">Tidak Ada Paket Tender Ditemukan</h3>
             <p className="text-sm text-slate-400">
-              Coba ganti filter kluster, batas waktu, atau hapus kata kunci pencarian Anda.
+              Coba ganti filter kluster, wilayah, batas waktu, atau hapus kata kunci pencarian Anda.
             </p>
           </div>
         ) : (
@@ -252,7 +306,9 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
                         }`}
                       >
                         <Clock className="w-3.5 h-3.5" />
-                        {tender.urgency_label}
+                        {tender.days_remaining <= 2
+                          ? `🔥 ${tender.days_remaining * 24} Jam Menuju Penutupan`
+                          : tender.urgency_label}
                       </span>
                     </div>
 
@@ -335,22 +391,39 @@ export function TenderFeed({ onSelectTenderForSurety, isPro, onOpenSubscribe }: 
                   </div>
 
                   {/* Card Actions */}
-                  <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+                  <div className="flex flex-wrap items-center gap-2 pt-2">
                     <button
                       onClick={() => onSelectTenderForSurety(tender)}
-                      className="w-full sm:flex-1 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/15 transition"
+                      className="flex-1 py-2.5 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/15 transition"
                     >
-                      <ShieldCheck className="w-4 h-4" />
+                      <ShieldCheck className="w-3.5 h-3.5" />
                       Minta Penawaran Jaminan Ini
                     </button>
+
+                    <button
+                      onClick={() =>
+                        onOpenEstimationModal({
+                          tenderTitle: tender.title,
+                          tenderCode: tender.tender_code,
+                          obligeeName: tender.agency_name,
+                          projectValue: tender.hps_value,
+                        })
+                      }
+                      title="Download Lembar Estimasi Resmi PDF"
+                      className="py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-400 font-semibold text-xs flex items-center justify-center gap-1 transition border border-slate-700"
+                    >
+                      <FileText className="w-3.5 h-3.5" />
+                      Draf PDF
+                    </button>
+
                     <a
                       href={tender.source_url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full sm:w-auto py-2.5 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium text-xs flex items-center justify-center gap-1.5 transition"
+                      className="py-2.5 px-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-slate-300 font-medium text-xs flex items-center justify-center gap-1 transition border border-slate-800"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
-                      Kunjungi LPSE
+                      LPSE
                     </a>
                   </div>
                 </div>

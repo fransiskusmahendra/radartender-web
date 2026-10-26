@@ -134,7 +134,7 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                 Formulir Pengajuan Jaminan Proyek
               </h3>
               <p className="text-xs text-slate-400 mt-1">
-                Data tender dan identitas perusahaan terisi otomatis. Tim kami akan menyiapkan simulasi penerbitan resmi OJK.
+                Data tender dan identitas perusahaan terisi otomatis. Tim kami akan menyiapkan simulasi penerbitan resmi melalui asuransi &amp; bank terkemuka.
               </p>
             </div>
 

@@ -63,7 +63,7 @@ export function Navbar({ onOpenSuretyModal, userProfile, onOpenLoginModal }: Nav
             Biaya Langganan
           </a>
           <a href="#kepatuhan-ojk" className="hover:text-amber-400 transition">
-            Regulasi OJK
+            Regulasi Penjaminan
           </a>
         </nav>
 
@@ -142,7 +142,7 @@ export function Navbar({ onOpenSuretyModal, userProfile, onOpenLoginModal }: Nav
             onClick={() => setMobileMenuOpen(false)}
             className="block text-slate-200 hover:text-amber-400 font-medium"
           >
-            Regulasi OJK
+            Regulasi Penjaminan
           </a>
           <div className="pt-2 flex flex-col gap-2">
             <button

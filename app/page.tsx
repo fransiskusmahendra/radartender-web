@@ -11,6 +11,7 @@ import { Footer } from "@/components/Footer";
 import { SubscribeModal } from "@/components/SubscribeModal";
 import { SuretyModal } from "@/components/SuretyModal";
 import { LoginModal } from "@/components/LoginModal";
+import { EstimationSheetModal } from "@/components/EstimationSheetModal";
 import { EnrichedTenderItem } from "@/lib/tenders-data";
 
 interface UserProfile {
@@ -33,7 +34,7 @@ export default function HomePage() {
   }>({
     id: "pro",
     title: "Pro Kontraktor (3 Bulan)",
-    price: 249000,
+    price: 199000,
   });
 
   const [isSuretyModalOpen, setIsSuretyModalOpen] = useState(false);
@@ -45,6 +46,18 @@ export default function HomePage() {
     tenderCode?: string;
     obligeeName?: string;
   }>({});
+
+  const [isEstimationModalOpen, setIsEstimationModalOpen] = useState(false);
+  const [estimationData, setEstimationData] = useState<{
+    tenderTitle?: string;
+    tenderCode?: string;
+    obligeeName?: string;
+    projectValue: number;
+    bondType?: string;
+    bondValue?: number;
+    companyName?: string;
+    contactPerson?: string;
+  }>({ projectValue: 10000000000 });
 
   // Load user profile on mount
   useEffect(() => {
@@ -95,6 +108,15 @@ export default function HomePage() {
     setIsSuretyModalOpen(true);
   };
 
+  const handleOpenEstimation = (data: any) => {
+    setEstimationData({
+      ...data,
+      companyName: userProfile?.companyName,
+      contactPerson: userProfile?.contactPerson,
+    });
+    setIsEstimationModalOpen(true);
+  };
+
   return (
     <>
       <Navbar
@@ -105,13 +127,21 @@ export default function HomePage() {
 
       <main className="flex-1">
         <Hero onOpenSubscribeModal={() => handleOpenSubscribe()} />
+
         <TenderFeed
           onSelectTenderForSurety={handleSelectTenderForSurety}
           isPro={Boolean(userProfile?.isPro)}
           onOpenSubscribe={() => handleOpenSubscribe()}
+          onOpenEstimationModal={handleOpenEstimation}
         />
-        <SuretyCalculator onOpenSuretyModalWithData={handleOpenSuretyWithCustomData} />
+
+        <SuretyCalculator
+          onOpenSuretyModalWithData={handleOpenSuretyWithCustomData}
+          onOpenEstimationModal={handleOpenEstimation}
+        />
+
         <PricingSection onSelectPlan={(plan) => handleOpenSubscribe(plan)} />
+
         <ComplianceNotice />
       </main>
 
@@ -134,6 +164,12 @@ export default function HomePage() {
         onClose={() => setIsLoginModalOpen(false)}
         userProfile={userProfile}
         onSaveProfile={handleSaveProfile}
+      />
+
+      <EstimationSheetModal
+        isOpen={isEstimationModalOpen}
+        onClose={() => setIsEstimationModalOpen(false)}
+        data={estimationData}
       />
     </>
   );

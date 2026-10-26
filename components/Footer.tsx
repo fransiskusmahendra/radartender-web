@@ -20,7 +20,7 @@ export function Footer() {
               </span>
             </div>
             <p className="text-xs text-slate-400 max-w-sm leading-relaxed">
-              Platform intelijen pengadaan lelang nasional (LPSE / SPSE / SIRUP / BUMN) terintegrasi simulasi dan layanan asistensi penerbitan Surety Bond &amp; Bank Garansi berizin OJK.
+              Platform intelijen pengadaan lelang nasional (LPSE / SPSE / SIRUP / BUMN) terintegrasi simulasi dan layanan asistensi penerbitan Surety Bond &amp; Bank Garansi terpercaya.
             </p>
             <div className="pt-2">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300">

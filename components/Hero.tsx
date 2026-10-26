@@ -27,7 +27,7 @@ export function Hero({ onOpenSubscribeModal }: { onOpenSubscribeModal: () => voi
 
         {/* Subtitle */}
         <p className="text-base sm:text-xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed">
-          Pantau lelang pemerintah &amp; BUMN (SPSE / LPSE / SIRUP) secara real-time dengan hitung mundur batas upload, dilengkapi kalkulator instan serta fast-track penerbitan <strong>Surety Bond &amp; Bank Garansi</strong> resmi berizin OJK.
+          Pantau lelang pemerintah &amp; BUMN (SPSE / LPSE / SIRUP) secara real-time dengan hitung mundur batas upload, dilengkapi kalkulator instan serta fast-track asistensi penerbitan <strong>Surety Bond &amp; Bank Garansi</strong> terpercaya.
         </p>
 
         {/* CTA Buttons */}
@@ -44,7 +44,7 @@ export function Hero({ onOpenSubscribeModal }: { onOpenSubscribeModal: () => voi
             className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 border border-slate-700 text-white font-semibold text-base hover:bg-slate-800 transition flex items-center justify-center gap-2"
           >
             <Bell className="w-4 h-4 text-amber-400" />
-            Berlangganan Notifikasi WhatsApp (Mulai Rp 99rb)
+            Berlangganan Notifikasi WhatsApp (Mulai Rp 79rb)
           </button>
         </div>
 
@@ -74,16 +74,16 @@ export function Hero({ onOpenSubscribeModal }: { onOpenSubscribeModal: () => voi
               <span className="text-xs font-bold uppercase tracking-wider">Surety Bond Cepat</span>
             </div>
             <p className="text-lg font-bold text-white">1 - 2 Hari Terbit</p>
-            <p className="text-xs text-slate-400">Asuransi &amp; Bank Devisa Rekanan</p>
+            <p className="text-xs text-slate-400">Asuransi &amp; Bank Devisa Terkemuka</p>
           </div>
 
           <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm">
             <div className="flex items-center gap-2 text-purple-400 mb-1">
               <CheckCircle2 className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase tracking-wider">Kepatuhan OJK</span>
+              <span className="text-xs font-bold uppercase tracking-wider">Kepatuhan Hukum</span>
             </div>
             <p className="text-lg font-bold text-white">100% Legal &amp; Resmi</p>
-            <p className="text-xs text-slate-400">Tanpa praktik rebating ilegal</p>
+            <p className="text-xs text-slate-400">Bebas praktik rebating ilegal</p>
           </div>
         </div>
       </div>

@@ -10,7 +10,7 @@ interface SubscribeModalProps {
 }
 
 export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalProps) {
-  const plan = initialPlan || { id: "pro", title: "Pro Kontraktor (3 Bulan)", price: 249000 };
+  const plan = initialPlan || { id: "pro", title: "Pro Kontraktor (3 Bulan)", price: 199000 };
 
   const [vendorName, setVendorName] = useState("");
   const [vendorWa, setVendorWa] = useState("");

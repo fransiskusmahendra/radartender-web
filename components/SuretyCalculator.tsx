@@ -18,9 +18,10 @@ interface SuretyCalculatorProps {
     projectValue: number;
     bondValue: number;
   }) => void;
+  onOpenEstimationModal: (data: any) => void;
 }
 
-export function SuretyCalculator({ onOpenSuretyModalWithData }: SuretyCalculatorProps) {
+export function SuretyCalculator({ onOpenSuretyModalWithData, onOpenEstimationModal }: SuretyCalculatorProps) {
   const [projectValue, setProjectValue] = useState<number>(10000000000); // 10 Miliar default
   const [bondType, setBondType] = useState<"bid" | "performance" | "advance" | "maintenance">("performance");
   const [bondPercentage, setBondPercentage] = useState<number>(5);
@@ -60,13 +61,13 @@ export function SuretyCalculator({ onOpenSuretyModalWithData }: SuretyCalculator
         <div className="text-center max-w-3xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold uppercase tracking-wider mb-4">
             <ShieldCheck className="w-4 h-4" />
-            Simulasi Cepat &amp; Fasilitas Penerbitan Resmi
+            Simulasi Cepat &amp; Fasilitas Penerbitan
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight mb-4">
             Kalkulator Surety Bond &amp; Bank Garansi
           </h2>
           <p className="text-slate-400 text-base sm:text-lg">
-            Hitung estimasi kebutuhan jaminan proyek Anda dalam hitungan detik. Diterbitkan oleh Asuransi Umum &amp; Bank Devisa rekanan resmi berizin Otoritas Jasa Keuangan (OJK).
+            Hitung estimasi kebutuhan jaminan proyek Anda dalam hitungan detik. Diterbitkan melalui Asuransi Umum &amp; Bank Devisa terkemuka yang terdaftar dan diawasi OJK / Bank Indonesia.
           </p>
         </div>
 
@@ -259,21 +260,39 @@ export function SuretyCalculator({ onOpenSuretyModalWithData }: SuretyCalculator
             </div>
 
             {/* Direct Action */}
-            <button
-              onClick={() =>
-                onOpenSuretyModalWithData({
-                  guaranteeType: getBondTypeName(),
-                  projectValue,
-                  bondValue: calculatedBondValue,
-                })
-              }
-              className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-400 text-slate-950 font-black text-sm uppercase tracking-wider hover:brightness-110 transition shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2"
-            >
-              <Send className="w-4 h-4" />
-              Proses Penerbitan Jaminan Sekarang
-            </button>
+            <div className="space-y-2.5">
+              <button
+                onClick={() =>
+                  onOpenSuretyModalWithData({
+                    guaranteeType: getBondTypeName(),
+                    projectValue,
+                    bondValue: calculatedBondValue,
+                  })
+                }
+                className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-400 text-slate-950 font-black text-sm uppercase tracking-wider hover:brightness-110 transition shadow-xl shadow-amber-500/25 flex items-center justify-center gap-2"
+              >
+                <Send className="w-4 h-4" />
+                Proses Penerbitan Jaminan Sekarang
+              </button>
+
+              <button
+                type="button"
+                onClick={() =>
+                  onOpenEstimationModal({
+                    tenderTitle: "Simulasi Jaminan Proyek Mandiri",
+                    projectValue,
+                    bondType: getBondTypeName(),
+                    bondValue: calculatedBondValue,
+                  })
+                }
+                className="w-full py-3 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-300 font-semibold text-xs flex items-center justify-center gap-1.5 transition"
+              >
+                <FileText className="w-4 h-4 text-amber-400" />
+                📄 Download Draf Estimasi Resmi (PDF)
+              </button>
+            </div>
             <p className="text-[11px] text-center text-slate-500">
-              Konsultasi langsung dengan tim penjaminan resmi berizin OJK. Respon dalam &lt; 15 menit.
+              Konsultasi langsung dengan tim fasilitator penjaminan terpercaya. Respon cepat &lt; 15 menit.
             </p>
           </div>
         </div>

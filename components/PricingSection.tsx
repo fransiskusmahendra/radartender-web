@@ -35,7 +35,7 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
               </div>
               <h3 className="text-xl font-bold text-white mb-4">Paket Coba 1 Bulan</h3>
               <div className="mb-6">
-                <span className="text-4xl font-black text-white">Rp 99.000</span>
+                <span className="text-4xl font-black text-white">Rp 79.000</span>
                 <span className="text-xs text-slate-400"> / bulan</span>
               </div>
               <p className="text-xs text-slate-400 mb-6 leading-relaxed">
@@ -48,7 +48,7 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
-                  Filter 1 Kategori Pengadaan
+                  Filter Kategori Pengadaan
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -65,12 +65,12 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                 onSelectPlan({
                   id: "starter",
                   title: "Starter Bulanan",
-                  price: 99000,
+                  price: 79000,
                 })
               }
               className="w-full py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition"
             >
-              Langganan Rp 99.000 via QRIS
+              Langganan Rp 79.000 via QRIS
             </button>
           </div>
 
@@ -85,10 +85,10 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
               </div>
               <h3 className="text-2xl font-black text-white mb-4">Kuartal Siap Menang</h3>
               <div className="mb-6">
-                <span className="text-4xl font-black text-white">Rp 249.000</span>
+                <span className="text-4xl font-black text-white">Rp 199.000</span>
                 <span className="text-xs text-slate-400"> / 3 bulan</span>
                 <div className="text-[11px] text-amber-400 mt-1 font-semibold">
-                  Hanya ~Rp 83.000/bln (Hemat 16%)
+                  Hanya ~Rp 66.000/bln (Hemat 16%)
                 </div>
               </div>
               <p className="text-xs text-slate-300 mb-6 leading-relaxed">
@@ -109,7 +109,7 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-amber-400 shrink-0" />
-                  Prioritas Fast-Track Penerbitan Surety Bond
+                  Prioritas Fast-Track Asistensi Surety Bond
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-amber-400 shrink-0" />
@@ -122,12 +122,12 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                 onSelectPlan({
                   id: "pro",
                   title: "Pro Kontraktor (3 Bulan)",
-                  price: 249000,
+                  price: 199000,
                 })
               }
               className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-sm transition shadow-lg shadow-amber-500/20"
             >
-              Langganan Rp 249.000 via QRIS
+              Langganan Rp 199.000 via QRIS
             </button>
           </div>
 
@@ -139,10 +139,10 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
               </div>
               <h3 className="text-xl font-bold text-white mb-4">Enterprise 1 Tahun</h3>
               <div className="mb-6">
-                <span className="text-4xl font-black text-white">Rp 799.000</span>
+                <span className="text-4xl font-black text-white">Rp 599.000</span>
                 <span className="text-xs text-slate-400"> / tahun</span>
                 <div className="text-[11px] text-cyan-400 mt-1 font-semibold">
-                  Hanya ~Rp 66.000/bln (Hemat 33%)
+                  Hanya ~Rp 49.000/bln (Hemat 38%)
                 </div>
               </div>
               <p className="text-xs text-slate-400 mb-6 leading-relaxed">
@@ -163,7 +163,7 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                 </li>
                 <li className="flex items-center gap-2">
                   <Check className="w-4 h-4 text-cyan-400 shrink-0" />
-                  Penerbitan Polis Express (1 Hari Kerja)
+                  Penerbitan Polis Express (1-2 Hari Kerja)
                 </li>
               </ul>
             </div>
@@ -172,12 +172,12 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                 onSelectPlan({
                   id: "vip",
                   title: "VIP Tahunan (12 Bulan)",
-                  price: 799000,
+                  price: 599000,
                 })
               }
               className="w-full py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm transition"
             >
-              Langganan Rp 799.000 via QRIS
+              Langganan Rp 599.000 via QRIS
             </button>
           </div>
         </div>
@@ -196,7 +196,7 @@ export function PricingSection({ onSelectPlan }: PricingSectionProps) {
                 Gratis Akses RadarTender.id 1 Tahun dengan Fasilitas Penjaminan Proyek
               </h4>
               <p className="text-xs sm:text-sm text-slate-300 mt-1 max-w-2xl">
-                Bila perusahaan Anda menerbitkan Jaminan Proyek (Surety Bond atau Bank Garansi) melalui jaringan agensi rekanan resmi kami, seluruh biaya langganan RadarTender.id selama 1 tahun akan <strong>dibebaskan (Rp 0 / Gratis)</strong> sebagai fasilitas bundling IT dari CV QIRA Solusi Digital.
+                Bila perusahaan Anda menerbitkan Jaminan Proyek (Surety Bond atau Bank Garansi) melalui jaringan agensi rekanan kami, seluruh biaya langganan RadarTender.id selama 1 tahun akan <strong>dibebaskan (Rp 0 / Gratis)</strong> sebagai fasilitas bundling IT dari CV QIRA Solusi Digital.
               </p>
             </div>
           </div>

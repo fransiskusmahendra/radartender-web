@@ -101,7 +101,7 @@ export function LoginModal({
                 Akun Berlangganan PRO Aktif
               </span>
               <span className="text-[11px] text-slate-300">
-                Akses alert WhatsApp harian &amp; prioritas penjaminan OJK aktif.
+                Akses alert WhatsApp harian &amp; prioritas penjaminan proyek aktif.
               </span>
             </div>
           </div>
