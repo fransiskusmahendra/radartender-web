@@ -13,6 +13,7 @@ import { SuretyModal } from "@/components/SuretyModal";
 import { LoginModal } from "@/components/LoginModal";
 import { EstimationSheetModal } from "@/components/EstimationSheetModal";
 import { EnrichedTenderItem } from "@/lib/tenders-data";
+import { Crown, CheckCircle2, Sparkles, X } from "lucide-react";
 
 interface UserProfile {
   companyName: string;
@@ -20,11 +21,13 @@ interface UserProfile {
   whatsapp: string;
   email?: string;
   isPro?: boolean;
+  activationCode?: string;
 }
 
 export default function HomePage() {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [showCelebration, setShowCelebration] = useState(false);
 
   const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<{
@@ -59,13 +62,38 @@ export default function HomePage() {
     contactPerson?: string;
   }>({ projectValue: 10000000000 });
 
-  // Load user profile on mount
+  // Load user profile & check 1-click activation link (e.g. ?activate=RT-XXXX or ?activate=PRO)
   useEffect(() => {
     try {
       const saved = localStorage.getItem("radartender_user_profile");
-      if (saved) {
-        setUserProfile(JSON.parse(saved));
+      let currentProfile: UserProfile | null = saved ? JSON.parse(saved) : null;
+
+      // Check URL query parameters for instant 1-click activation from WhatsApp
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get("activate") || params.get("code");
+
+      if (code) {
+        const clean = code.trim().toUpperCase();
+        if (
+          clean.startsWith("RT-") ||
+          clean === "PRO" ||
+          clean === "RADARPRO" ||
+          clean === "QIRA-PRO" ||
+          clean.startsWith("VIP")
+        ) {
+          currentProfile = {
+            companyName: currentProfile?.companyName || "Perusahaan Kontraktor",
+            contactPerson: currentProfile?.contactPerson || "",
+            whatsapp: currentProfile?.whatsapp || "",
+            isPro: true,
+            activationCode: clean,
+          };
+          localStorage.setItem("radartender_user_profile", JSON.stringify(currentProfile));
+          setShowCelebration(true);
+        }
       }
+
+      setUserProfile(currentProfile);
     } catch (e) {}
   }, []);
 
@@ -73,6 +101,9 @@ export default function HomePage() {
     setUserProfile(profile);
     if (profile) {
       localStorage.setItem("radartender_user_profile", JSON.stringify(profile));
+      if (profile.isPro) {
+        setShowCelebration(true);
+      }
     } else {
       localStorage.removeItem("radartender_user_profile");
     }
@@ -124,6 +155,31 @@ export default function HomePage() {
         userProfile={userProfile}
         onOpenLoginModal={() => setIsLoginModalOpen(true)}
       />
+
+      {/* Celebration Banner when PRO is successfully activated */}
+      {showCelebration && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 w-[92%] max-w-lg p-4 rounded-2xl bg-gradient-to-r from-amber-500 via-orange-500 to-amber-400 text-slate-950 shadow-2xl flex items-center justify-between gap-3 animate-bounce-once">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-slate-950/20 flex items-center justify-center shrink-0">
+              <Crown className="w-6 h-6 text-slate-950" />
+            </div>
+            <div>
+              <span className="text-xs font-black uppercase tracking-wider block">
+                🎉 Selamat! Akun PRO Telah Aktif
+              </span>
+              <span className="text-xs font-medium">
+                Seluruh 500+ lelang &amp; kalkulasi penjaminan telah terbuka penuh untuk Anda.
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={() => setShowCelebration(false)}
+            className="p-1 rounded-lg hover:bg-slate-950/20 text-slate-950"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+      )}
 
       <main className="flex-1">
         <Hero onOpenSubscribeModal={() => handleOpenSubscribe()} />

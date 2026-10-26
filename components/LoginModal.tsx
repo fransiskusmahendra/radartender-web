@@ -46,12 +46,14 @@ export function LoginModal({
     e.preventDefault();
     setErrorMsg("");
 
-    // If accessCode entered is 'QIRA-PRO' or 'RADARPRO' or starts with 'RT-', mark as PRO
+    const clean = accessCode.trim().toUpperCase();
     const isPro =
       userProfile?.isPro ||
-      accessCode.trim().toUpperCase() === "RADARPRO" ||
-      accessCode.trim().toUpperCase() === "QIRA-PRO" ||
-      accessCode.trim().toUpperCase().startsWith("RT-");
+      clean.startsWith("RT-") ||
+      clean.startsWith("PRO") ||
+      clean.startsWith("VIP") ||
+      clean.startsWith("RADAR") ||
+      clean.startsWith("KONTRAKTOR");
 
     const newProfile: UserProfile = {
       companyName,
@@ -59,6 +61,7 @@ export function LoginModal({
       whatsapp,
       email,
       isPro: Boolean(isPro),
+      activationCode: clean || userProfile?.activationCode,
     };
 
     onSaveProfile(newProfile);
