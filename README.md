@@ -20,8 +20,8 @@ Engineered & Powered by **CV QIRA Solusi Digital** ([qirasolution.com](https://w
 2. Klik **"Add New..."** -> **"Project"**.
 3. Import repositori **`radartender-web`**.
 4. Di bagian **Environment Variables**, tambahkan:
-   - `TELEGRAM_BOT_TOKEN` = `8691156717:AAEjRYYDEudqEekI3CUr-YFkJMKRE_9yFTw`
-   - `TELEGRAM_CHAT_ID` = `1013981853`
+   - `RADARTENDER_BOT_TOKEN` = `8833867052:AAENMsY9RnRh_Ycl1tgjaK_3PhgvCAMjRFs`
+   - `RADARTENDER_CHAT_ID` = `1013981853`
 5. Klik **"Deploy"**.
 
 ---
