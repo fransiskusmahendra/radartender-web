@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { FAQ_DATA } from "@/components/FAQSection";
+import { FAQ_DATA } from "@/lib/faq-data";
 
 export const viewport: Viewport = {
   themeColor: "#020617",
