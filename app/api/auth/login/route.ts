@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const authResult = authenticateContractor(whatsapp, accessCode);
+    const authResult = await authenticateContractor(whatsapp, accessCode);
 
     if (!authResult.authenticated && !authResult.isPro) {
       return NextResponse.json({

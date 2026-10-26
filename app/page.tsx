@@ -254,6 +254,7 @@ export default function HomePage() {
         onClose={() => setIsLoginModalOpen(false)}
         userProfile={userProfile}
         onSaveProfile={handleSaveProfile}
+        onOpenSubscribe={() => handleOpenSubscribe()}
       />
 
       <EstimationSheetModal

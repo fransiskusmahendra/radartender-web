@@ -4,17 +4,18 @@ import React, { useState, useEffect } from "react";
 import {
   X,
   UserCheck,
-  ShieldCheck,
   Crown,
   LogOut,
   CheckCircle2,
   Smartphone,
-  KeyRound,
+  Tag,
   Building2,
-  Calendar,
   AlertCircle,
   Loader2,
   ExternalLink,
+  ChevronDown,
+  ChevronUp,
+  ArrowRight,
 } from "lucide-react";
 
 export interface UserProfile {
@@ -35,6 +36,7 @@ interface LoginModalProps {
   onClose: () => void;
   userProfile: UserProfile | null;
   onSaveProfile: (profile: UserProfile | null) => void;
+  onOpenSubscribe?: () => void;
 }
 
 export function LoginModal({
@@ -42,11 +44,13 @@ export function LoginModal({
   onClose,
   userProfile,
   onSaveProfile,
+  onOpenSubscribe,
 }: LoginModalProps) {
   const [activeTab, setActiveTab] = useState<"login" | "profile">("login");
 
-  // Form states for Cloud Login
+  // Form states for WhatsApp Cloud Login
   const [loginPhone, setLoginPhone] = useState("");
+  const [showPromoInput, setShowPromoInput] = useState(false);
   const [loginCode, setLoginCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -71,7 +75,7 @@ export function LoginModal({
 
   if (!isOpen) return null;
 
-  // Handle Cloud Verification (Cross-Device login via WhatsApp & Order ID / Kode)
+  // Handle WhatsApp Only Cloud Login
   const handleCloudLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
@@ -93,7 +97,7 @@ export function LoginModal({
       if (!res.ok || !data.success) {
         setErrorMessage(
           data.message ||
-            "Data tidak ditemukan. Pastikan Nomor WhatsApp atau Kode Akses sesuai order."
+            "Nomor WhatsApp belum terdaftar sebagai PRO. Pastikan nomor sudah sesuai atau hubungi admin."
         );
         setIsLoading(false);
         return;
@@ -118,12 +122,12 @@ export function LoginModal({
       };
 
       onSaveProfile(updatedProfile);
-      setSuccessMessage(data.message || "Login berhasil! Status PRO aktif.");
+      setSuccessMessage(data.message || "Berhasil masuk! Status PRO aktif.");
       setTimeout(() => {
         onClose();
       }, 1200);
     } catch (err: any) {
-      setErrorMessage("Gagal menghubungkan ke server autentikasi. Coba sesaat lagi.");
+      setErrorMessage("Gagal menghubungkan ke server autentikasi. Periksa koneksi Anda.");
     } finally {
       setIsLoading(false);
     }
@@ -183,21 +187,21 @@ export function LoginModal({
         <div className="mb-6">
           <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
             <UserCheck className="w-4 h-4" />
-            Autentikasi &amp; Identitas Kontraktor
+            Akses Kontraktor
           </span>
           <h3 className="text-2xl font-black text-white mt-1">
             {userProfile?.isPro
               ? "Akun Kontraktor PRO"
               : userProfile
               ? "Profil Kontraktor"
-              : "Masuk / Aktivasi Akun"}
+              : "Masuk via WhatsApp"}
           </h3>
           <p className="text-xs text-slate-400 mt-1">
-            Akses lelang BUMN &amp; LPSE tanpa batasan, tersinkronisasi lintas HP &amp; laptop Anda.
+            Cukup gunakan nomor WhatsApp Anda. Akun PRO tersinkronisasi otomatis di seluruh perangkat.
           </p>
         </div>
 
-        {/* Tab Switcher if not active PRO */}
+        {/* Tab Switcher */}
         <div className="grid grid-cols-2 p-1 bg-slate-950 rounded-xl mb-5 border border-slate-800 text-xs font-bold">
           <button
             type="button"
@@ -209,7 +213,7 @@ export function LoginModal({
             }`}
           >
             <Smartphone className="w-3.5 h-3.5" />
-            {userProfile?.isPro ? "Status Langganan" : "Masuk Cloud PRO"}
+            {userProfile?.isPro ? "Status Langganan" : "Masuk via WhatsApp"}
           </button>
           <button
             type="button"
@@ -251,18 +255,18 @@ export function LoginModal({
                 <span className="text-slate-400">Nomor WhatsApp:</span>
                 <span className="font-semibold text-white">{userProfile.whatsapp}</span>
               </div>
+              {userProfile.companyName && (
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Perusahaan:</span>
+                  <span className="font-semibold text-white">{userProfile.companyName}</span>
+                </div>
+              )}
               {userProfile.expiresAt && (
                 <div className="flex justify-between">
                   <span className="text-slate-400">Masa Aktif Hingga:</span>
                   <span className="font-semibold text-amber-300">
                     {formatExpiryDate(userProfile.expiresAt)}
                   </span>
-                </div>
-              )}
-              {userProfile.activationCode && (
-                <div className="flex justify-between">
-                  <span className="text-slate-400">Order ID:</span>
-                  <span className="font-mono text-slate-300">{userProfile.activationCode}</span>
                 </div>
               )}
             </div>
@@ -287,12 +291,12 @@ export function LoginModal({
           </div>
         )}
 
-        {/* TAB 1: CLOUD LOGIN FORM */}
+        {/* TAB 1: WHATSAPP-ONLY LOGIN FORM */}
         {activeTab === "login" && !userProfile?.isPro && (
           <form onSubmit={handleCloudLogin} className="space-y-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Nomor WhatsApp Terdaftar: *
+                Nomor WhatsApp Anda: *
               </label>
               <div className="relative">
                 <Smartphone className="absolute left-3.5 top-3 w-4 h-4 text-slate-500" />
@@ -302,35 +306,70 @@ export function LoginModal({
                   placeholder="081234567890"
                   value={loginPhone}
                   onChange={(e) => setLoginPhone(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Kode Akses / Order ID PRO: *
-              </label>
-              <div className="relative">
-                <KeyRound className="absolute left-3.5 top-3 w-4 h-4 text-slate-500" />
-                <input
-                  type="text"
-                  required
-                  placeholder="Contoh: RT-2610-891 atau RADARPRO"
-                  value={loginCode}
-                  onChange={(e) => setLoginCode(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500 font-mono uppercase"
+                  className="w-full pl-10 pr-3.5 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500 tracking-wide"
                 />
               </div>
               <p className="text-[11px] text-slate-500 mt-1">
-                Diberikan admin setelah Anda menyelesaikan pembayaran paket langganan.
+                Masukkan nomor WhatsApp yang Anda gunakan saat memesan paket PRO.
               </p>
             </div>
 
+            {/* Collapsible Promo Code (Optional) */}
+            <div>
+              <button
+                type="button"
+                onClick={() => setShowPromoInput(!showPromoInput)}
+                className="text-[11px] text-amber-400/90 hover:text-amber-300 font-semibold flex items-center gap-1 transition"
+              >
+                <Tag className="w-3 h-3" />
+                {showPromoInput ? "Sembunyikan Kode Promo" : "Punya Kode Promo / Voucher? (Opsional)"}
+                {showPromoInput ? (
+                  <ChevronUp className="w-3 h-3" />
+                ) : (
+                  <ChevronDown className="w-3 h-3" />
+                )}
+              </button>
+
+              {showPromoInput && (
+                <div className="mt-2 animate-fadeIn">
+                  <input
+                    type="text"
+                    placeholder="Contoh: RADARPRO atau VIP2026"
+                    value={loginCode}
+                    onChange={(e) => setLoginCode(e.target.value)}
+                    className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-500 font-mono uppercase"
+                  />
+                </div>
+              )}
+            </div>
+
             {errorMessage && (
-              <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
-                <span>{errorMessage}</span>
+              <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs space-y-2">
+                <div className="flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <span>{errorMessage}</span>
+                </div>
+                <div className="pt-1 flex items-center gap-2">
+                  <a
+                    href="#harga"
+                    onClick={() => {
+                      onClose();
+                      if (onOpenSubscribe) onOpenSubscribe();
+                    }}
+                    className="px-2.5 py-1 rounded bg-amber-500 text-slate-950 font-bold text-[10px] uppercase hover:bg-amber-400 transition"
+                  >
+                    Daftar PRO Sekarang
+                  </a>
+                  <a
+                    href="https://wa.me/628211076517?text=Halo%20Admin%20RadarTender%2C%20saya%20sudah%20transfer%20dan%20ingin%20aktivasi%20nomor%20WhatsApp%20saya"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-[10px] text-slate-300 hover:text-white underline inline-flex items-center gap-0.5"
+                  >
+                    Konfirmasi ke Admin
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
               </div>
             )}
 
@@ -353,8 +392,8 @@ export function LoginModal({
                 </>
               ) : (
                 <>
-                  <Crown className="w-4 h-4" />
-                  Masuk &amp; Sinkronkan PRO
+                  <span>Masuk Akun PRO</span>
+                  <ArrowRight className="w-4 h-4" />
                 </>
               )}
             </button>
@@ -366,7 +405,7 @@ export function LoginModal({
                 rel="noreferrer"
                 className="text-[11px] text-slate-400 hover:text-amber-400 inline-flex items-center gap-1 transition"
               >
-                Belum punya akun / Butuh bantuan aktivasi? Hubungi Admin WhatsApp
+                Belum berlangganan? Hubungi Admin WhatsApp
                 <ExternalLink className="w-3 h-3" />
               </a>
             </div>
@@ -392,7 +431,7 @@ export function LoginModal({
 
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Nama PIC / Kontak Anda: *
+                Nama PIC / Estimator: *
               </label>
               <input
                 type="text"

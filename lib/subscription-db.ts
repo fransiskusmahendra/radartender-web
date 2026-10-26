@@ -2,11 +2,12 @@
  * RadarTender.id — Cloud Subscription & Authentication Engine
  * ==========================================================
  * Mengelola database langganan kontraktor secara aman, mendukung autentikasi
- * lintas perangkat (HP, Laptop, PC), pelacakan masa aktif (auto-expiry),
- * dan verifikasi pembayaran 1-klik untuk admin (Ko Mahen).
+ * berbasis NOMOR WHATSAPP LINTAS PERANGKAT (HP, Laptop, PC), pelacakan masa aktif,
+ * dan aktivasi 1-klik via Telegram untuk admin (Ko Mahen).
  */
 
 import { createHmac } from "crypto";
+import initialSubscribers from "@/data/subscribers.json";
 
 export interface SubscriptionRecord {
   orderId: string;
@@ -25,11 +26,30 @@ export interface SubscriptionRecord {
 }
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET || "qira_radar_secret_2026_x89";
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN || "";
+const REPO_OWNER = "fransiskusmahendra";
+const REPO_NAME = "radartender-web";
 
-// Server-side persistent storage cache (survives requests during serverless runtime)
+// Server-side persistent storage cache (seeded from data/subscribers.json)
 const GLOBAL_SUBSCRIPTIONS = new Map<string, SubscriptionRecord>();
 
-// Helper to normalize WhatsApp phone numbers (e.g. 0812 -> 62812)
+// Seed in-memory cache
+try {
+  for (const [key, val] of Object.entries(initialSubscribers)) {
+    const rec = val as SubscriptionRecord;
+    GLOBAL_SUBSCRIPTIONS.set(key, rec);
+    if (rec.orderId) {
+      GLOBAL_SUBSCRIPTIONS.set(rec.orderId.toUpperCase(), rec);
+    }
+    if (rec.whatsapp) {
+      GLOBAL_SUBSCRIPTIONS.set(rec.whatsapp, rec);
+    }
+  }
+} catch (e) {
+  console.error("[Subscription DB] Seed error:", e);
+}
+
+// Helper to normalize WhatsApp phone numbers (e.g. 0812 -> 62812, +62 812 -> 62812)
 export function normalizePhone(raw: string): string {
   const digits = (raw || "").replace(/\D/g, "");
   if (digits.startsWith("0")) {
@@ -45,6 +65,59 @@ export function generateToken(orderId: string, phone: string): string {
     .digest("hex")
     .slice(0, 16)
     .toUpperCase();
+}
+
+/**
+ * Sync subscribers to GitHub data/subscribers.json for permanent cloud persistence
+ */
+export async function syncSubscriberToGitHub(record: SubscriptionRecord): Promise<void> {
+  try {
+    const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/data/subscribers.json`;
+    const headers = {
+      "User-Agent": "RadarTender-CloudSync/1.0",
+      Authorization: `token ${GITHUB_TOKEN}`,
+      "Content-Type": "application/json",
+    };
+
+    let currentSha = "";
+    let currentData: Record<string, SubscriptionRecord> = {};
+
+    try {
+      const getRes = await fetch(url, { headers, cache: "no-store" });
+      if (getRes.ok) {
+        const fileJson = await getRes.json();
+        currentSha = fileJson.sha;
+        const decoded = Buffer.from(fileJson.content, "base64").toString("utf-8");
+        currentData = JSON.parse(decoded);
+      }
+    } catch (err) {
+      console.warn("[CloudSync] Fetch existing failed, creating new:", err);
+    }
+
+    // Add or update record keyed by normalized phone number
+    const cleanPhone = normalizePhone(record.whatsapp);
+    currentData[cleanPhone] = record;
+
+    const updatedContent = Buffer.from(JSON.stringify(currentData, null, 2)).toString("base64");
+
+    const putRes = await fetch(url, {
+      method: "PUT",
+      headers,
+      body: JSON.stringify({
+        message: `chore(subscribers): activate ${record.whatsapp} (${record.vendorName})`,
+        content: updatedContent,
+        sha: currentSha || undefined,
+      }),
+    });
+
+    if (putRes.ok) {
+      console.log(`[CloudSync] Successfully saved subscriber ${cleanPhone} to GitHub permanently.`);
+    } else {
+      console.error("[CloudSync] GitHub API error:", putRes.status, await putRes.text());
+    }
+  } catch (error) {
+    console.error("[CloudSync] Failed to sync subscriber to GitHub:", error);
+  }
 }
 
 /**
@@ -94,7 +167,7 @@ export function activateSubscriptionByAdmin(
   const cleanId = (orderId || "").trim().toUpperCase();
   let record = GLOBAL_SUBSCRIPTIONS.get(cleanId);
 
-  // If order was generated dynamically, synthesize record if token valid or admin override
+  // If order was generated dynamically, synthesize record
   if (!record) {
     record = {
       orderId: cleanId,
@@ -123,11 +196,14 @@ export function activateSubscriptionByAdmin(
   record.activatedAt = now.toISOString();
   record.expiresAt = expires.toISOString();
 
-  // Save back
+  // Save to memory
   GLOBAL_SUBSCRIPTIONS.set(cleanId, record);
   if (record.whatsapp) {
     GLOBAL_SUBSCRIPTIONS.set(record.whatsapp, record);
   }
+
+  // Asynchronously sync to GitHub cloud storage
+  syncSubscriberToGitHub(record).catch(() => {});
 
   return {
     success: true,
@@ -137,24 +213,23 @@ export function activateSubscriptionByAdmin(
 }
 
 /**
- * Verifikasi login kontraktor lintas perangkat (HP/Laptop)
- * Masuk menggunakan No WhatsApp + (Order ID atau Token)
+ * Verifikasi login kontraktor HANYA DENGAN NOMOR WHATSAPP (atau Kode Promo/Order ID)
  */
-export function authenticateContractor(
+export async function authenticateContractor(
   phoneOrCode: string,
   accessCode?: string
-): {
+): Promise<{
   authenticated: boolean;
   isPro: boolean;
   record?: SubscriptionRecord;
   daysRemaining?: number;
   message: string;
-} {
+}> {
   const cleanInput = (phoneOrCode || "").trim().toUpperCase();
   const cleanCode = (accessCode || "").trim().toUpperCase();
   const normalizedPhone = normalizePhone(cleanInput);
 
-  // Universal master keys / referral codes
+  // 1. Universal master promo keys
   const MASTER_CODES = ["RADARPRO", "QIRA-PRO", "VIP2026", "KONTRAKTORJUARA"];
   if (MASTER_CODES.includes(cleanInput) || MASTER_CODES.includes(cleanCode)) {
     const futureDate = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
@@ -180,13 +255,35 @@ export function authenticateContractor(
     };
   }
 
-  // Find record by Phone number or Order ID
+  // 2. Cek memori lokal
   let record =
-    GLOBAL_SUBSCRIPTIONS.get(cleanInput) ||
     GLOBAL_SUBSCRIPTIONS.get(normalizedPhone) ||
-    GLOBAL_SUBSCRIPTIONS.get(cleanCode);
+    GLOBAL_SUBSCRIPTIONS.get(cleanInput) ||
+    (cleanCode ? GLOBAL_SUBSCRIPTIONS.get(cleanCode) : undefined);
 
-  // If order ID begins with RT- but not in memory yet, allow instant verified session
+  // 3. Jika belum di memori lokal, coba fetch live dari GitHub raw
+  if (!record && normalizedPhone) {
+    try {
+      const liveRes = await fetch(
+        `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/data/subscribers.json?t=${Date.now()}`,
+        { cache: "no-store" }
+      );
+      if (liveRes.ok) {
+        const liveData = await liveRes.json();
+        if (liveData[normalizedPhone]) {
+          record = liveData[normalizedPhone];
+          GLOBAL_SUBSCRIPTIONS.set(normalizedPhone, record!);
+          if (record?.orderId) {
+            GLOBAL_SUBSCRIPTIONS.set(record.orderId.toUpperCase(), record);
+          }
+        }
+      }
+    } catch (e) {
+      // offline or raw fetch error, proceed to fallback
+    }
+  }
+
+  // 4. Jika menggunakan Order ID RT-XXXX langsung
   if (!record && (cleanInput.startsWith("RT-") || cleanCode.startsWith("RT-"))) {
     const orderKey = cleanInput.startsWith("RT-") ? cleanInput : cleanCode;
     const futureDate = new Date(Date.now() + 90 * 24 * 60 * 60 * 1000);
@@ -208,15 +305,17 @@ export function authenticateContractor(
     GLOBAL_SUBSCRIPTIONS.set(record.whatsapp, record);
   }
 
+  // 5. Jika nomor tidak ditemukan sama sekali
   if (!record) {
     return {
       authenticated: false,
       isPro: false,
-      message: "Nomor WhatsApp atau Order ID tidak ditemukan. Pastikan sudah memesan paket.",
+      message:
+        "Nomor WhatsApp belum terdaftar sebagai PRO. Silakan lakukan pembayaran langganan atau hubungi Admin.",
     };
   }
 
-  // Check Expiry Date
+  // 6. Cek Masa Aktif (Expiry)
   if (record.expiresAt) {
     const expireTime = new Date(record.expiresAt).getTime();
     const nowTime = Date.now();
@@ -227,7 +326,7 @@ export function authenticateContractor(
         isPro: false,
         record,
         daysRemaining: 0,
-        message: "Masa aktif langganan Anda telah berakhir. Silakan lakukan perpanjangan.",
+        message: "Masa aktif langganan Anda telah berakhir. Silakan lakukan perpanjangan paket.",
       };
     }
 
@@ -241,7 +340,6 @@ export function authenticateContractor(
     };
   }
 
-  // If pending payment
   return {
     authenticated: true,
     isPro: record.status === "active",
