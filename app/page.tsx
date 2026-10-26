@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { TenderFeed } from "@/components/TenderFeed";
@@ -10,9 +10,21 @@ import { ComplianceNotice } from "@/components/ComplianceNotice";
 import { Footer } from "@/components/Footer";
 import { SubscribeModal } from "@/components/SubscribeModal";
 import { SuretyModal } from "@/components/SuretyModal";
+import { LoginModal } from "@/components/LoginModal";
 import { EnrichedTenderItem } from "@/lib/tenders-data";
 
+interface UserProfile {
+  companyName: string;
+  contactPerson: string;
+  whatsapp: string;
+  email?: string;
+  isPro?: boolean;
+}
+
 export default function HomePage() {
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   const [isSubscribeModalOpen, setIsSubscribeModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<{
     id: "starter" | "pro" | "vip";
@@ -33,6 +45,25 @@ export default function HomePage() {
     tenderCode?: string;
     obligeeName?: string;
   }>({});
+
+  // Load user profile on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("radartender_user_profile");
+      if (saved) {
+        setUserProfile(JSON.parse(saved));
+      }
+    } catch (e) {}
+  }, []);
+
+  const handleSaveProfile = (profile: UserProfile | null) => {
+    setUserProfile(profile);
+    if (profile) {
+      localStorage.setItem("radartender_user_profile", JSON.stringify(profile));
+    } else {
+      localStorage.removeItem("radartender_user_profile");
+    }
+  };
 
   const handleOpenSubscribe = (plan?: {
     id: "starter" | "pro" | "vip";
@@ -66,7 +97,11 @@ export default function HomePage() {
 
   return (
     <>
-      <Navbar onOpenSuretyModal={() => setIsSuretyModalOpen(true)} />
+      <Navbar
+        onOpenSuretyModal={() => setIsSuretyModalOpen(true)}
+        userProfile={userProfile}
+        onOpenLoginModal={() => setIsLoginModalOpen(true)}
+      />
 
       <main className="flex-1">
         <Hero onOpenSubscribeModal={() => handleOpenSubscribe()} />
@@ -88,6 +123,13 @@ export default function HomePage() {
         isOpen={isSuretyModalOpen}
         onClose={() => setIsSuretyModalOpen(false)}
         initialData={suretyInitialData}
+      />
+
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+        userProfile={userProfile}
+        onSaveProfile={handleSaveProfile}
       />
     </>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X, ShieldCheck, Send, Loader2, CheckCircle2 } from "lucide-react";
+import { X, ShieldCheck, Send, Loader2, CheckCircle2, FileText, Building2 } from "lucide-react";
 import { formatRupiah } from "@/lib/tenders-data";
 
 interface SuretyModalProps {
@@ -29,6 +29,22 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  // Auto-fill from localStorage (saved contractor identity / login)
+  useEffect(() => {
+    if (isOpen) {
+      try {
+        const saved = localStorage.getItem("radartender_user_profile");
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed.companyName) setCompanyName(parsed.companyName);
+          if (parsed.contactPerson) setContactPerson(parsed.contactPerson);
+          if (parsed.whatsapp) setWhatsapp(parsed.whatsapp);
+        }
+      } catch (e) {}
+    }
+  }, [isOpen]);
+
+  // Auto-fill from selected tender or calculator initialData
   useEffect(() => {
     if (initialData) {
       if (initialData.guaranteeType) setGuaranteeType(initialData.guaranteeType);
@@ -36,7 +52,8 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
       if (initialData.bondValue) setBondValue(initialData.bondValue);
       if (initialData.obligeeName) setObligeeName(initialData.obligeeName);
       if (initialData.tenderTitle) {
-        setNotes(`Tender: ${initialData.tenderCode || ""} - ${initialData.tenderTitle}`);
+        const prefix = initialData.tenderCode ? `[${initialData.tenderCode}] ` : "";
+        setNotes(`Paket Tender: ${prefix}${initialData.tenderTitle}`);
       }
     }
   }, [initialData]);
@@ -46,6 +63,21 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    // Save profile to localStorage for future automatic fill
+    try {
+      const existing = localStorage.getItem("radartender_user_profile");
+      const parsed = existing ? JSON.parse(existing) : {};
+      localStorage.setItem(
+        "radartender_user_profile",
+        JSON.stringify({
+          ...parsed,
+          companyName,
+          contactPerson,
+          whatsapp,
+        })
+      );
+    } catch (e) {}
 
     try {
       const res = await fetch("/api/surety-request", {
@@ -66,10 +98,9 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
       const data = await res.json();
       if (data.success) {
         setSubmitted(true);
-        // Direct WhatsApp redirection
-        const cleanWa = (whatsapp || "").replace(/[^0-9]/g, "");
+        // Direct WhatsApp fast-track to Ko Mahen
         const waText = encodeURIComponent(
-          `Halo Tim Penjaminan RadarTender.id,\nSaya ingin mengajukan penerbitan jaminan proyek:\n\n*Perusahaan:* ${companyName}\n*PIC:* ${contactPerson}\n*No WhatsApp:* ${whatsapp}\n*Jenis Jaminan:* ${guaranteeType}\n*Nilai Proyek:* ${formatRupiah(projectValue)}\n*Nilai Jaminan:* ${formatRupiah(bondValue)}\n*Pemilik Proyek (Obligee):* ${obligeeName || "-"}\n*Keterangan:* ${notes || "-"}\n\nMohon informasi persyaratan dan draft penawarannya. Terima kasih!`
+          `Halo Tim Penjaminan RadarTender.id,\nSaya ingin mengajukan penerbitan jaminan proyek:\n\n*Perusahaan:* ${companyName}\n*PIC:* ${contactPerson}\n*No WhatsApp:* ${whatsapp}\n*Jenis Jaminan:* ${guaranteeType}\n*Nilai Proyek:* ${formatRupiah(projectValue)}\n*Nilai Jaminan:* ${formatRupiah(bondValue)}\n*Pemilik Proyek (Obligee):* ${obligeeName || "-"}\n*Keterangan Proyek:* ${notes || "-"}\n\nMohon informasi persyaratan dan draft penawarannya. Terima kasih!`
         );
         setTimeout(() => {
           window.open(`https://wa.me/628211076517?text=${waText}`, "_blank");
@@ -100,12 +131,29 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                 Layanan Asistensi Penjaminan Proyek
               </span>
               <h3 className="text-2xl font-black text-white mt-1">
-                Formulir Penerbitan Surety Bond / Bank Garansi
+                Formulir Pengajuan Jaminan Proyek
               </h3>
               <p className="text-xs text-slate-400 mt-1">
-                Isi data proyek Anda di bawah ini. Tim analis underwriter kami akan menghitung simulasi resmi dalam waktu 15 menit.
+                Data tender dan identitas perusahaan terisi otomatis. Tim kami akan menyiapkan simulasi penerbitan resmi OJK.
               </p>
             </div>
+
+            {/* Selected Tender Context Card (if opened from a specific tender) */}
+            {initialData?.tenderTitle && (
+              <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 mb-5 flex items-start gap-3">
+                <FileText className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
+                <div className="text-xs">
+                  <span className="font-bold text-amber-300 block">
+                    {initialData.tenderCode ? `[${initialData.tenderCode}] ` : ""}
+                    {initialData.tenderTitle}
+                  </span>
+                  <div className="text-slate-300 mt-0.5 flex flex-wrap gap-x-3">
+                    {initialData.obligeeName && <span>Satker: {initialData.obligeeName}</span>}
+                    {initialData.projectValue && <span>HPS: {formatRupiah(initialData.projectValue)}</span>}
+                  </div>
+                </div>
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -195,7 +243,7 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                     onChange={(e) => setProjectValue(Number(e.target.value))}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500"
                   />
-                  <span className="text-[11px] text-amber-400 mt-1 block">
+                  <span className="text-[11px] text-amber-400 mt-1 block font-semibold">
                     {formatRupiah(projectValue)}
                   </span>
                 </div>
@@ -210,7 +258,7 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                     onChange={(e) => setBondValue(Number(e.target.value))}
                     className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500"
                   />
-                  <span className="text-[11px] text-emerald-400 mt-1 block">
+                  <span className="text-[11px] text-emerald-400 mt-1 block font-semibold">
                     {formatRupiah(bondValue)}
                   </span>
                 </div>
@@ -243,7 +291,7 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      Kirim &amp; Hubungkan ke Underwriter
+                      Ajukan
                     </>
                   )}
                 </button>

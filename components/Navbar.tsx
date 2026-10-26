@@ -2,9 +2,23 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Radar, ShieldCheck, Zap, Menu, X } from "lucide-react";
+import { Radar, ShieldCheck, User, Crown, Menu, X } from "lucide-react";
 
-export function Navbar({ onOpenSuretyModal }: { onOpenSuretyModal: () => void }) {
+interface UserProfile {
+  companyName: string;
+  contactPerson: string;
+  whatsapp: string;
+  email?: string;
+  isPro?: boolean;
+}
+
+interface NavbarProps {
+  onOpenSuretyModal: () => void;
+  userProfile: UserProfile | null;
+  onOpenLoginModal: () => void;
+}
+
+export function Navbar({ onOpenSuretyModal, userProfile, onOpenLoginModal }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -21,9 +35,15 @@ export function Navbar({ onOpenSuretyModal }: { onOpenSuretyModal: () => void })
               <span className="font-extrabold text-xl text-white tracking-tight">
                 RadarTender<span className="text-amber-400">.id</span>
               </span>
-              <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                PRO
-              </span>
+              {userProfile?.isPro ? (
+                <span className="text-[10px] uppercase font-black tracking-wider px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center gap-1">
+                  <Crown className="w-3 h-3" /> PRO
+                </span>
+              ) : (
+                <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-slate-800/80 text-slate-400 border border-slate-700">
+                  FREE
+                </span>
+              )}
             </div>
             <p className="text-[11px] text-slate-400 hidden sm:block">
               Intelijen Pengadaan &amp; Penjaminan Proyek
@@ -47,8 +67,26 @@ export function Navbar({ onOpenSuretyModal }: { onOpenSuretyModal: () => void })
           </a>
         </nav>
 
-        {/* Action Button */}
-        <div className="hidden md:flex items-center gap-4">
+        {/* Action Button & Account Status */}
+        <div className="hidden md:flex items-center gap-3">
+          <button
+            onClick={onOpenLoginModal}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold border transition ${
+              userProfile?.isPro
+                ? "bg-amber-500/10 border-amber-500/40 text-amber-300 hover:bg-amber-500/20"
+                : userProfile
+                ? "bg-slate-900 border-slate-700 text-white hover:bg-slate-800"
+                : "bg-slate-950 border-slate-800 text-slate-400 hover:text-white hover:border-slate-700"
+            }`}
+          >
+            <User className="w-3.5 h-3.5" />
+            {userProfile ? (
+              <span className="truncate max-w-[120px]">{userProfile.companyName || userProfile.contactPerson}</span>
+            ) : (
+              <span>Masuk / Akun</span>
+            )}
+          </button>
+
           <button
             onClick={onOpenSuretyModal}
             className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 text-slate-950 font-bold text-sm hover:from-amber-400 hover:to-orange-400 transition shadow-lg shadow-amber-500/20"
@@ -59,7 +97,13 @@ export function Navbar({ onOpenSuretyModal }: { onOpenSuretyModal: () => void })
         </div>
 
         {/* Mobile menu button */}
-        <div className="md:hidden flex items-center">
+        <div className="md:hidden flex items-center gap-2">
+          <button
+            onClick={onOpenLoginModal}
+            className="text-xs text-slate-300 px-2.5 py-1.5 rounded-lg bg-slate-900 border border-slate-800"
+          >
+            {userProfile ? userProfile.companyName.slice(0, 10) : "Akun"}
+          </button>
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="text-slate-400 hover:text-white p-2"
@@ -100,7 +144,17 @@ export function Navbar({ onOpenSuretyModal }: { onOpenSuretyModal: () => void })
           >
             Regulasi OJK
           </a>
-          <div className="pt-2">
+          <div className="pt-2 flex flex-col gap-2">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenLoginModal();
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-slate-900 text-slate-200 font-bold text-sm border border-slate-800"
+            >
+              <User className="w-4 h-4" />
+              {userProfile ? `Profil: ${userProfile.companyName}` : "Masuk / Identitas Akun"}
+            </button>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
