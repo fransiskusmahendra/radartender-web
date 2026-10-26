@@ -67,6 +67,9 @@ export function Navbar({ onOpenSuretyModal, userProfile, onOpenLoginModal }: Nav
           <a href="#harga" className="hover:text-amber-400 transition">
             Biaya Langganan
           </a>
+          <a href="#faq-lelang" className="hover:text-amber-400 transition">
+            FAQ
+          </a>
           <a href="#kepatuhan-ojk" className="hover:text-amber-400 transition">
             Regulasi Penjaminan
           </a>
@@ -141,6 +144,13 @@ export function Navbar({ onOpenSuretyModal, userProfile, onOpenLoginModal }: Nav
             className="block text-slate-200 hover:text-amber-400 font-medium"
           >
             Biaya Langganan
+          </a>
+          <a
+            href="#faq-lelang"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block text-slate-200 hover:text-amber-400 font-medium"
+          >
+            FAQ &amp; Tanya Jawab
           </a>
           <a
             href="#kepatuhan-ojk"

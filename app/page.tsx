@@ -6,6 +6,7 @@ import { Hero } from "@/components/Hero";
 import { TenderFeed } from "@/components/TenderFeed";
 import { SuretyCalculator } from "@/components/SuretyCalculator";
 import { PricingSection } from "@/components/PricingSection";
+import { FAQSection } from "@/components/FAQSection";
 import { ComplianceNotice } from "@/components/ComplianceNotice";
 import { Footer } from "@/components/Footer";
 import { SubscribeModal } from "@/components/SubscribeModal";
@@ -231,6 +232,8 @@ export default function HomePage() {
         />
 
         <PricingSection onSelectPlan={(plan) => handleOpenSubscribe(plan)} />
+
+        <FAQSection />
 
         <ComplianceNotice />
       </main>

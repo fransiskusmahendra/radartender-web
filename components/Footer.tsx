@@ -60,6 +60,11 @@ export function Footer() {
                 </a>
               </li>
               <li>
+                <a href="#faq-lelang" className="hover:text-white transition">
+                  Tanya Jawab &amp; FAQ
+                </a>
+              </li>
+              <li>
                 <a href="#kepatuhan-ojk" className="hover:text-white transition">
                   SOP Kepatuhan Regulasi
                 </a>

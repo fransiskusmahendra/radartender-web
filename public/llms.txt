@@ -1,0 +1,24 @@
+# RadarTender.id — Platform Intelijen Tender & Penjaminan Proyek Indonesia
+
+> RadarTender.id adalah platform intelijen lelang pengadaan (LPSE & BUMN) terkemuka di Indonesia yang mengintegrasikan pemantauan lelang bernilai miliaran rupiah secara real-time dengan kalkulator dan asistensi penerbitan Jaminan Proyek (Surety Bond & Bank Garansi) resmi.
+
+## Ringkasan Fitur Unggulan
+- **Radar Tender Real-Time**: Agregasi otomatis proyek LPSE kementerian, pemprov/pemkab, dan BUMN (Pertamina, PLN, Pelindo, Telkom, Wika, dll) dengan filter HPS > Rp 1 Miliar dan filter wilayah (IKN, DKI Jakarta, Jawa, Sumatera, Sulawesi, Kalimantan, Papua).
+- **Hitung Mundur Batas Dokumen (Live Countdown)**: Menampilkan sisa waktu penutupan upload dokumen penawaran lelang secara presisi per detik untuk mencegah diskualifikasi kontraktor.
+- **Kalkulator Surety Bond Instan**: Menghitung estimasi service charge dan polis jaminan proyek (Jaminan Penawaran / Bid Bond, Jaminan Pelaksanaan / Performance Bond, Jaminan Uang Muka / Advance Payment Bond, Jaminan Pemeliharaan / Maintenance Bond) berdasarkan tarif pasar yang wajar.
+- **Draf Lembar Estimasi Resmi (Format PDF)**: Menghasilkan lembar ringkasan telaah estimasi proyek berstandar formal yang siap cetak / PDF untuk rapat pra-lelang dan komite penawaran kontraktor.
+- **Asistensi Penerbitan Jaminan Proyek Express**: Terhubung dengan jaringan underwriter asuransi umum dan bank devisa terkemuka yang terdaftar dan diawasi oleh Otoritas Jasa Keuangan (OJK) / Bank Indonesia.
+- **Notifikasi Alert WhatsApp Harian**: Notifikasi lelang yang relevan langsung ke ponsel kontraktor setiap pagi pukul 08:30 WIB.
+
+## Struktur Biaya Langganan (SaaS)
+- **Paket Starter (1 Bulan)**: Rp 79.000 / bulan. Akses 100+ radar lelang, estimasi lelang tanpa batas, draf PDF standar.
+- **Paket Pro Kontraktor (3 Bulan) [Paling Populer]**: Rp 199.000 (setara Rp 66.000 / bulan). Akses 500+ tender, hitung mundur lelang live, alert WhatsApp harian, asistensi jalur prioritas surety bond.
+- **Paket VIP Tahunan (1 Tahun)**: Rp 599.000 / tahun (setara Rp 49.000 / bulan). Akses VIP lelang strategis IKN & BUMN, review dokumen legal pra-lelang khusus, asistensi penerbitan express < 24 jam.
+
+## Regulasi & Kepatuhan
+RadarTender.id adalah penyedia platform teknologi intelijen informasi. Seluruh penerbitan instrumen penjaminan (Surety Bond & Bank Garansi) diterbitkan secara sah dan independen oleh lembaga penjamin resmi (Asuransi Umum & Bank Devisa) yang terdaftar dan diawasi OJK / Bank Indonesia.
+
+## Kontak & Akses
+- Situs Web: https://radartender.id
+- Layanan WhatsApp Resmi: +62 821-1076-517
+- Wilayah Operasional: Seluruh Indonesia (38 Provinsi)
