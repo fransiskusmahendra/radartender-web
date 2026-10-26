@@ -1,9 +1,15 @@
 export async function sendTelegramNotification(message: string): Promise<boolean> {
-  const token = process.env.TELEGRAM_BOT_TOKEN || "8691156717:AAEjRYYDEudqEekI3CUr-YFkJMKRE_9yFTw";
-  const chatId = process.env.TELEGRAM_CHAT_ID || "1013981853";
+  // Dedicated Radar Tender Bot Token
+  const token =
+    process.env.RADARTENDER_BOT_TOKEN ||
+    process.env.TELEGRAM_BOT_TOKEN;
+  const chatId =
+    process.env.RADARTENDER_CHAT_ID ||
+    process.env.TELEGRAM_CHAT_ID ||
+    "1013981853";
 
   if (!token || !chatId) {
-    console.warn("[Telegram] Token or Chat ID not configured");
+    console.warn("[RadarTender Telegram] Bot token or Chat ID not configured. Please set RADARTENDER_BOT_TOKEN.");
     return false;
   }
 
@@ -19,7 +25,8 @@ export async function sendTelegramNotification(message: string): Promise<boolean
     });
     return res.ok;
   } catch (err) {
-    console.error("[Telegram] Error sending alert:", err);
+    console.error("[RadarTender Telegram] Error sending alert:", err);
     return false;
   }
 }
+
