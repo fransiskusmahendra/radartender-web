@@ -23,6 +23,9 @@ export interface SubscriptionRecord {
   activatedAt?: string;
   expiresAt?: string;
   token: string;
+  preferredRegion?: string;
+  cluster?: string;
+  specialKeywords?: string;
 }
 
 const ADMIN_SECRET = process.env.ADMIN_SECRET || "qira_radar_secret_2026_x89";
@@ -132,6 +135,9 @@ export function createSubscription(data: {
   plan: "starter" | "pro" | "vip";
   planTitle: string;
   amount: number;
+  preferredRegion?: string;
+  cluster?: string;
+  specialKeywords?: string;
 }): SubscriptionRecord {
   const cleanPhone = normalizePhone(data.whatsapp);
   const token = generateToken(data.orderId, cleanPhone);
@@ -148,12 +154,32 @@ export function createSubscription(data: {
     status: "pending_payment",
     createdAt: new Date().toISOString(),
     token,
+    preferredRegion: data.preferredRegion || "Semua Wilayah",
+    cluster: data.cluster || "Semua Kluster",
+    specialKeywords: data.specialKeywords || "",
   };
 
   GLOBAL_SUBSCRIPTIONS.set(data.orderId.toUpperCase(), record);
   GLOBAL_SUBSCRIPTIONS.set(cleanPhone, record);
 
   return record;
+}
+
+/**
+ * Mengambil seluruh pelanggan yang aktif berlangganan untuk kurasi alert
+ */
+export function getAllActiveSubscribers(): SubscriptionRecord[] {
+  const seenPhones = new Set<string>();
+  const activeList: SubscriptionRecord[] = [];
+
+  for (const record of Array.from(GLOBAL_SUBSCRIPTIONS.values())) {
+    if (record.status === "active" && record.whatsapp && !seenPhones.has(record.whatsapp)) {
+      seenPhones.add(record.whatsapp);
+      activeList.push(record);
+    }
+  }
+
+  return activeList;
 }
 
 /**

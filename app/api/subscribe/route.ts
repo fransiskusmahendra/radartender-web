@@ -5,20 +5,36 @@ import { createSubscription } from "@/lib/subscription-db";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { plan, planTitle, price, uniqueAmount, vendorName, vendorWa, email, cluster } = body;
+    const {
+      plan,
+      planTitle,
+      price,
+      uniqueAmount,
+      vendorName,
+      vendorPic,
+      vendorWa,
+      email,
+      cluster,
+      preferredRegion,
+      specialKeywords,
+    } = body;
 
     const finalAmount = uniqueAmount || price;
     const orderId = `RT-${Date.now().toString(36).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
 
-    // Create record in cloud database
+    // Create record in cloud database with curation preferences
     const subscription = createSubscription({
       orderId,
       vendorName,
+      contactPerson: vendorPic,
       whatsapp: vendorWa,
       email,
       plan: plan || "pro",
       planTitle: planTitle || "Pro Kontraktor",
       amount: finalAmount,
+      preferredRegion: preferredRegion || "Semua Wilayah",
+      cluster: cluster || "Semua Kluster",
+      specialKeywords: specialKeywords || "",
     });
 
     const activateUrl = `https://radartender.id/api/admin/activate?orderId=${orderId}&token=${subscription.token}`;
@@ -32,10 +48,15 @@ export async function POST(req: Request) {
 💰 *Nominal Transfer:* *Rp ${Number(finalAmount).toLocaleString("id-ID")}*
 🏦 *Tujuan Bayar:* Bank BCA \`4210122848\` a/n Fransiskus Xaverius Mahendra Kotualubun
 🏢 *Perusahaan / PT:* ${vendorName || "-"}
+👤 *PIC / Estimator:* ${vendorPic || "-"}
 📱 *WhatsApp:* [Klik Chat Customer](https://wa.me/${waVendorClean}) (\`${vendorWa || "-"}\`)
 📧 *Email:* ${email || "-"}
-🏷️ *Kluster Fokus:* ${cluster || "Semua"}
-⏰ *Waktu:* ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })} WIB
+━━━━━━━━━━━━━━━━━━━━
+🎯 *PROFIL KURASI ALERT WHATSAPP:*
+📍 *Wilayah Fokus:* ${preferredRegion || "Semua Wilayah (Nasional)"}
+🏗️ *Kluster Pengadaan:* ${cluster || "Semua Kluster"}
+🔍 *Kata Kunci Khusus:* ${specialKeywords || "Standar (Semua Lelang Relevan)"}
+⏰ *Waktu Order:* ${new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })} WIB
 ━━━━━━━━━━━━━━━━━━━━
 ⚡ *Tombol Verifikasi & Aktivasi (1-Klik):*
 ${activateUrl}

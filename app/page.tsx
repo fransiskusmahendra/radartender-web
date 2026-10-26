@@ -27,6 +27,9 @@ export interface UserProfile {
   daysRemaining?: number;
   expiresAt?: string;
   orderId?: string;
+  cluster?: string;
+  preferredRegion?: string;
+  specialKeywords?: string;
 }
 
 export default function HomePage() {
@@ -123,6 +126,9 @@ export default function HomePage() {
                 daysRemaining: data.daysRemaining,
                 expiresAt: data.user.expiresAt || currentProfile?.expiresAt,
                 orderId: data.user.orderId || currentProfile?.orderId,
+                cluster: data.user.cluster || currentProfile?.cluster,
+                preferredRegion: data.user.preferredRegion || currentProfile?.preferredRegion,
+                specialKeywords: data.user.specialKeywords || currentProfile?.specialKeywords,
               };
               setUserProfile(updated);
               localStorage.setItem("radartender_user_profile", JSON.stringify(updated));

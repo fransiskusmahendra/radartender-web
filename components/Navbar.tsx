@@ -15,6 +15,9 @@ export interface UserProfile {
   daysRemaining?: number;
   expiresAt?: string;
   orderId?: string;
+  cluster?: string;
+  preferredRegion?: string;
+  specialKeywords?: string;
 }
 
 interface NavbarProps {

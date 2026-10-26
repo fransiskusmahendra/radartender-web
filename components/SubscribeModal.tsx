@@ -29,6 +29,8 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
   const [vendorWa, setVendorWa] = useState("");
   const [email, setEmail] = useState("");
   const [cluster, setCluster] = useState("Pekerjaan Konstruksi");
+  const [preferredRegion, setPreferredRegion] = useState("Semua Wilayah");
+  const [specialKeywords, setSpecialKeywords] = useState("");
 
   const [orderId, setOrderId] = useState<string | null>(null);
   const [finalAmount, setFinalAmount] = useState<number>(plan.price);
@@ -63,6 +65,8 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
           vendorWa,
           email,
           cluster,
+          preferredRegion,
+          specialKeywords,
         }),
       });
 
@@ -79,6 +83,9 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
               contactPerson: vendorPic,
               whatsapp: vendorWa,
               email,
+              cluster,
+              preferredRegion,
+              specialKeywords,
               lastOrderId: data.orderId,
             })
           );
@@ -193,21 +200,74 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1">
-                  Fokus Kluster Tender:
-                </label>
-                <select
-                  value={cluster}
-                  onChange={(e) => setCluster(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500"
-                >
-                  <option value="Semua Kluster">Semua Kluster Lelang</option>
-                  <option value="Pekerjaan Konstruksi">Pekerjaan Konstruksi &amp; Fisik</option>
-                  <option value="Pengadaan Barang">Pengadaan Barang &amp; Material</option>
-                  <option value="Jasa Konsultansi">Jasa Konsultansi &amp; Perencanaan</option>
-                  <option value="Jasa Lainnya">Jasa Lainnya</option>
-                </select>
+              {/* Smart WhatsApp Alert Preferences Card */}
+              <div className="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                    🎯 Kustomisasi Alert WhatsApp Terkurasi
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 font-semibold">
+                    Anti-Spam
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-300 leading-snug">
+                  Kami tidak akan membombardir WhatsApp Anda dengan 500 lelang. Bot kami mengurasi 3-5 lelang terbaik setiap pagi yang 100% cocok dengan kriteria Anda:
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      Kluster Pengadaan:
+                    </label>
+                    <select
+                      value={cluster}
+                      onChange={(e) => setCluster(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-500"
+                    >
+                      <option value="Semua Kluster">Semua Kluster Lelang</option>
+                      <option value="Pekerjaan Konstruksi">Pekerjaan Konstruksi &amp; Fisik</option>
+                      <option value="Pengadaan Barang">Pengadaan Barang &amp; Material</option>
+                      <option value="Jasa Konsultansi">Jasa Konsultansi &amp; Perencanaan</option>
+                      <option value="Jasa Lainnya">Jasa Lainnya</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">
+                      Wilayah Fokus Operasional:
+                    </label>
+                    <select
+                      value={preferredRegion}
+                      onChange={(e) => setPreferredRegion(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-500"
+                    >
+                      <option value="Semua Wilayah">Semua Wilayah (Nasional)</option>
+                      <option value="IKN & Kalimantan">IKN &amp; Kalimantan</option>
+                      <option value="DKI Jakarta">DKI Jakarta</option>
+                      <option value="Jawa Timur">Jawa Timur</option>
+                      <option value="Jawa Barat">Jawa Barat</option>
+                      <option value="Jawa Tengah">Jawa Tengah</option>
+                      <option value="Sumatera">Sumatera</option>
+                      <option value="Sulawesi">Sulawesi</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Kata Kunci / Permintaan Khusus (Opsional):
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: khusus jalan &amp; jembatan, gedung RSUD, genset, min HPS 10M"
+                    value={specialKeywords}
+                    onChange={(e) => setSpecialKeywords(e.target.value)}
+                    className="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-500"
+                  />
+                  <span className="text-[10px] text-slate-400 mt-1 block">
+                    *Tender yang memuat kata kunci ini akan diprioritaskan di baris teratas alert harian Anda.
+                  </span>
+                </div>
               </div>
 
               <div className="pt-4">

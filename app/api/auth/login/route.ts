@@ -40,6 +40,9 @@ export async function POST(req: NextRequest) {
         orderId: authResult.record?.orderId,
         expiresAt: authResult.record?.expiresAt,
         isPro: authResult.isPro,
+        cluster: authResult.record?.cluster,
+        preferredRegion: authResult.record?.preferredRegion,
+        specialKeywords: authResult.record?.specialKeywords,
       },
     });
   } catch (error: any) {

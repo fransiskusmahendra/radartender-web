@@ -15,6 +15,8 @@ export interface TenderItem {
   location: string;
   lpse_source: string;
   source_url: string;
+  registration_url?: string;
+  pic_contact?: string; // Kontak Pokja / Panitia / Helpdesk LPSE
   surety_opportunity: boolean;
 }
 
@@ -43,6 +45,8 @@ export const TENDERS_SEED: TenderItem[] = [
     location: "Penajam Paser Utara, Kalimantan Timur (IKN)",
     lpse_source: "LPSE Otorita IKN Nusantara",
     source_url: "https://spseic.ikn.go.id/eproc4",
+    registration_url: "https://spseic.ikn.go.id/eproc4/lelang/daftar/pendaftaran",
+    pic_contact: "Pokja Pemilihan Ditjen Cipta Karya (Helpdesk LPSE IKN: 0811-540-8800)",
     surety_opportunity: true,
   },
   {
@@ -58,6 +62,8 @@ export const TENDERS_SEED: TenderItem[] = [
     location: "Trenggalek - Tulungagung, Jawa Timur",
     lpse_source: "LPSE Kementerian PUPR",
     source_url: "https://spse.pu.go.id/eproc4/lelang",
+    registration_url: "https://spse.pu.go.id/eproc4/lelang/daftar",
+    pic_contact: "Pokja BP2JK Jawa Timur (Call Center: 031-8288220 / WA: 0812-3221-5500)",
     surety_opportunity: true,
   },
   {
@@ -73,6 +79,8 @@ export const TENDERS_SEED: TenderItem[] = [
     location: "Makassar, Sulawesi Selatan",
     lpse_source: "e-Procurement Pertamina Group",
     source_url: "https://eproc.pertamina.com",
+    registration_url: "https://eproc.pertamina.com/vendor/login",
+    pic_contact: "Procurement Helpdesk Pertamina Patra Niaga (Contact Pertamina: 135 / pcc@pertamina.com)",
     surety_opportunity: true,
   },
   {
@@ -88,6 +96,8 @@ export const TENDERS_SEED: TenderItem[] = [
     location: "Jakarta Barat, DKI Jakarta",
     lpse_source: "LPSE Provinsi DKI Jakarta",
     source_url: "https://lpse.jakarta.go.id/eproc4/lelang",
+    registration_url: "https://lpse.jakarta.go.id/eproc4/lelang/daftar",
+    pic_contact: "Pokja BPPBJ DKI Jakarta (Helpdesk: 021-3822234 / WA: 0811-1999-5773)",
     surety_opportunity: true,
   },
   {
@@ -103,6 +113,8 @@ export const TENDERS_SEED: TenderItem[] = [
     location: "Semarang, Jawa Tengah",
     lpse_source: "e-Procurement PT PLN (Persero)",
     source_url: "https://eproc.pln.co.id",
+    registration_url: "https://eproc.pln.co.id/portal/login",
+    pic_contact: "Tim Pengadaan UIT JBT (Helpdesk e-Proc: 024-8451100 / ext. 320)",
     surety_opportunity: true,
   },
   {
@@ -118,6 +130,8 @@ export const TENDERS_SEED: TenderItem[] = [
     location: "Padang Pariaman, Sumatera Barat",
     lpse_source: "LPSE Kementerian Perhubungan",
     source_url: "https://lpse.dephub.go.id/eproc4",
+    registration_url: "https://lpse.dephub.go.id/eproc4/lelang/daftar",
+    pic_contact: "Pokja ULP Ditjen Hubud (Helpdesk: 021-3505550 / WA: 0813-1002-3344)",
     surety_opportunity: true,
   },
   {
@@ -133,6 +147,8 @@ export const TENDERS_SEED: TenderItem[] = [
     location: "Bandung, Jawa Barat",
     lpse_source: "LPSE Provinsi Jawa Barat",
     source_url: "https://lpse.jabarprov.go.id/eproc4",
+    registration_url: "https://lpse.jabarprov.go.id/eproc4/lelang/daftar",
+    pic_contact: "Biro Pengadaan Barang & Jasa Jabar (022-4233340 / WA: 0811-222-3838)",
     surety_opportunity: false,
   },
   {
@@ -148,6 +164,8 @@ export const TENDERS_SEED: TenderItem[] = [
     location: "Surabaya, Jawa Timur",
     lpse_source: "e-Procurement Pelindo",
     source_url: "https://eproc.pelindo.co.id",
+    registration_url: "https://eproc.pelindo.co.id/vendor/login",
+    pic_contact: "Divisi Pengadaan Pelindo Regional 3 (Helpdesk: 031-3298631 / pengadaan@pelindo.co.id)",
     surety_opportunity: true,
   },
 ];
