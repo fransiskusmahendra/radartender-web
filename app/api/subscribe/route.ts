@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { sendTelegramNotification } from "@/lib/telegram";
 import { createSubscription } from "@/lib/subscription-db";
+import {
+  createMidtransSnapTransaction,
+  MIDTRANS_CLIENT_KEY,
+  MIDTRANS_SNAP_SCRIPT_URL,
+} from "@/lib/midtrans";
 
 export async function POST(req: Request) {
   try {
@@ -65,10 +70,41 @@ _Setelah mutasi BCA masuk, klik link di atas untuk langsung mengaktifkan akun PR
 
     await sendTelegramNotification(message);
 
+    // Generate Midtrans Snap transaction token
+    let snapToken: string | undefined;
+    let snapRedirectUrl: string | undefined;
+    try {
+      const snapResult = await createMidtransSnapTransaction({
+        orderId,
+        grossAmount: finalAmount,
+        itemDetails: [
+          {
+            id: plan || "pro",
+            name: planTitle || "Paket RadarTender PRO",
+            price: finalAmount,
+            quantity: 1,
+          },
+        ],
+        customerDetails: {
+          firstName: vendorPic || vendorName || "Kontraktor",
+          email: email || "kontraktor@radartender.id",
+          phone: vendorWa,
+        },
+      });
+      snapToken = snapResult.token;
+      snapRedirectUrl = snapResult.redirectUrl;
+    } catch (midtransErr) {
+      console.warn("[Subscribe API] Midtrans token generation notice:", midtransErr);
+    }
+
     return NextResponse.json({
       success: true,
       orderId,
       amount: finalAmount,
+      snapToken,
+      snapRedirectUrl,
+      clientKey: MIDTRANS_CLIENT_KEY,
+      snapScriptUrl: MIDTRANS_SNAP_SCRIPT_URL,
       message: "Order berhasil dibuat",
     });
   } catch (error) {
