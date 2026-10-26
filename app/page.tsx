@@ -105,7 +105,11 @@ export default function HomePage() {
 
       <main className="flex-1">
         <Hero onOpenSubscribeModal={() => handleOpenSubscribe()} />
-        <TenderFeed onSelectTenderForSurety={handleSelectTenderForSurety} />
+        <TenderFeed
+          onSelectTenderForSurety={handleSelectTenderForSurety}
+          isPro={Boolean(userProfile?.isPro)}
+          onOpenSubscribe={() => handleOpenSubscribe()}
+        />
         <SuretyCalculator onOpenSuretyModalWithData={handleOpenSuretyWithCustomData} />
         <PricingSection onSelectPlan={(plan) => handleOpenSubscribe(plan)} />
         <ComplianceNotice />
