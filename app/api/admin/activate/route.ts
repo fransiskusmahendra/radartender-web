@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { activateSubscriptionByAdmin } from "@/lib/subscription-db";
 import { sendTelegramNotification } from "@/lib/telegram";
-import { seedTenders } from "@/lib/tenders-data";
+import { getEnrichedTenders } from "@/lib/tenders-data";
 import { curateTendersForSubscriber } from "@/lib/crawler-engine";
 
 export const runtime = "nodejs";
@@ -42,7 +42,7 @@ _Akun telah aktif sebagai PRO. Kontraktor sudah dapat mengakses seluruh lelang &
     await sendTelegramNotification(alertMsg);
 
     // Generate smart curated alerts for this specific contractor
-    const curation = curateTendersForSubscriber(record, seedTenders);
+    const curation = curateTendersForSubscriber(record, getEnrichedTenders());
 
     // WhatsApp combined welcome & curated tender message for Ko Mahen
     const combinedMessage = `Halo Pak/Bu dari ${record.vendorName},\nPembayaran langganan RadarTender.id Anda telah kami verifikasi! ✅\n\nAkun Anda kini aktif sebagai *PRO MEMBER* (Order ID: ${record.orderId}) hingga *${expiresFormatted}*.\n\nKlik link berikut untuk membuka akses instan di perangkat Anda:\n👉 https://radartender.id?activate=${record.orderId}\n\n${curation.whatsappMessage}`;
