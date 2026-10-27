@@ -50,8 +50,8 @@ export async function POST(req: Request) {
 ━━━━━━━━━━━━━━━━━━━━
 📌 *Order ID:* \`${orderId}\`
 📦 *Paket:* ${planTitle} (${plan})
-💰 *Nominal Transfer:* *Rp ${Number(finalAmount).toLocaleString("id-ID")}*
-🏦 *Tujuan Bayar:* Bank BCA \`4210122848\` a/n Fransiskus Xaverius Mahendra Kotualubun
+💰 *Nominal:* *Rp ${Number(finalAmount).toLocaleString("id-ID")}*
+💳 *Metode Tersedia:* QRIS Saweria & Bank BCA \`4210122848\` a/n Fransiskus Xaverius Mahendra Kotualubun
 🏢 *Perusahaan / PT:* ${vendorName || "-"}
 👤 *PIC / Estimator:* ${vendorPic || "-"}
 📱 *WhatsApp:* [Klik Chat Customer](https://wa.me/${waVendorClean}) (\`${vendorWa || "-"}\`)
@@ -66,7 +66,7 @@ export async function POST(req: Request) {
 ⚡ *Tombol Verifikasi & Aktivasi (1-Klik):*
 ${activateUrl}
 ━━━━━━━━━━━━━━━━━━━━
-_Setelah mutasi BCA masuk, klik link di atas untuk langsung mengaktifkan akun PRO kontraktor secara otomatis._`;
+_Setelah bukti pembayaran QRIS Saweria atau mutasi BCA terkonfirmasi, klik link aktivasi di atas untuk langsung mengaktifkan akun PRO kontraktor secara otomatis._`;
 
     await sendTelegramNotification(message);
 

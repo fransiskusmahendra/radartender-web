@@ -15,6 +15,7 @@ import {
   MessageSquare,
   Zap,
   Sparkles,
+  ExternalLink,
 } from "lucide-react";
 
 interface SubscribeModalProps {
@@ -37,7 +38,7 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
   const [orderId, setOrderId] = useState<string | null>(null);
   const [finalAmount, setFinalAmount] = useState<number>(plan.price);
   const [step, setStep] = useState<"form" | "payment">("form");
-  const [paymentMethod, setPaymentMethod] = useState<"midtrans" | "bca">("midtrans");
+  const [paymentMethod, setPaymentMethod] = useState<"qris" | "bca" | "midtrans">("qris");
   const [loading, setLoading] = useState(false);
   const [copiedRek, setCopiedRek] = useState(false);
   const [copiedNominal, setCopiedNominal] = useState(false);
@@ -184,9 +185,14 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
     }
   };
 
-  const handleWhatsAppConfirm = () => {
+  const handleWhatsAppConfirm = (customMethod?: string) => {
+    const methodLabel = customMethod || (paymentMethod === "qris" ? "QRIS Saweria" : paymentMethod === "midtrans" ? "Midtrans" : "Transfer Bank BCA");
+    const tujuanText = methodLabel.includes("QRIS")
+      ? "QRIS Saweria (a/n Fransiskus Xaverius Mahendra)"
+      : "Bank BCA 4210122848 a/n Fransiskus Xaverius Mahendra Kotualubun";
+
     const waText = encodeURIComponent(
-      `Halo Tim RadarTender.id,\nSaya sudah melakukan transfer pembayaran:\n\n*Order ID:* ${orderId}\n*Paket:* ${plan.title}\n*Nominal Transfer:* Rp ${finalAmount.toLocaleString("id-ID")}\n*Tujuan:* Bank BCA 4210122848 a/n Fransiskus Xaverius Mahendra Kotualubun\n*Perusahaan:* ${vendorName}\n*PIC:* ${vendorPic || "-"}\n*No WA:* ${vendorWa}\n\nBerikut bukti transfernya, mohon dibantu aktivasi notifikasi bot WhatsApp kami. Terima kasih!`
+      `Halo Tim RadarTender.id,\nSaya sudah melakukan pembayaran:\n\n*Order ID:* ${orderId}\n*Paket:* ${plan.title}\n*Nominal Transfer:* Rp ${finalAmount.toLocaleString("id-ID")}\n*Metode:* ${methodLabel}\n*Tujuan:* ${tujuanText}\n*Perusahaan:* ${vendorName}\n*PIC:* ${vendorPic || "-"}\n*No WA:* ${vendorWa}\n\nBerikut bukti pembayarannya, mohon dibantu aktivasi notifikasi bot WhatsApp kami. Terima kasih!`
     );
     window.open(`https://wa.me/6281314620473?text=${waText}`, "_blank");
   };
@@ -407,88 +413,153 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
                 </div>
 
                 {/* Payment Method Selector Tabs */}
-                <div className="grid grid-cols-2 gap-2 mb-6 p-1 rounded-2xl bg-slate-950 border border-slate-800">
+                <div className="grid grid-cols-3 gap-1.5 mb-6 p-1.5 rounded-2xl bg-slate-950 border border-slate-800">
                   <button
                     type="button"
-                    onClick={() => setPaymentMethod("midtrans")}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition ${
-                      paymentMethod === "midtrans"
+                    onClick={() => setPaymentMethod("qris")}
+                    className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition ${
+                      paymentMethod === "qris"
                         ? "bg-amber-500 text-slate-950 shadow"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
-                    <Zap className="w-3.5 h-3.5" />
-                    ⚡ Otomatis (Midtrans)
+                    <QrCode className="w-3.5 h-3.5" />
+                    <span className="truncate">⚡ QRIS Instan</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setPaymentMethod("bca")}
-                    className={`py-2 px-3 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition ${
+                    className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition ${
                       paymentMethod === "bca"
                         ? "bg-amber-500 text-slate-950 shadow"
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
                     <CreditCard className="w-3.5 h-3.5" />
-                    Manual Bank BCA
+                    <span className="truncate">Transfer BCA</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPaymentMethod("midtrans")}
+                    className={`py-2 px-2 rounded-xl text-xs font-bold flex items-center justify-center gap-1 transition ${
+                      paymentMethod === "midtrans"
+                        ? "bg-amber-500 text-slate-950 shadow"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Zap className="w-3.5 h-3.5" />
+                    <span className="truncate">Midtrans</span>
                   </button>
                 </div>
 
-                {/* METHOD 1: MIDTRANS SNAP PAYMENT GATEWAY */}
-                {paymentMethod === "midtrans" ? (
+                {/* METHOD 1: QRIS INSTAN (SAWERIA) */}
+                {paymentMethod === "qris" ? (
                   <div className="space-y-4 mb-6">
                     <div className="p-5 rounded-2xl bg-gradient-to-br from-amber-500/15 via-orange-500/5 to-slate-950 border border-amber-500/30 space-y-4">
                       <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-black text-xs">
-                            <Zap className="w-4 h-4 text-amber-400" />
+                            <QrCode className="w-4 h-4 text-amber-400" />
                           </div>
                           <div>
-                            <span className="text-xs font-bold text-white block">Midtrans Payment Gateway</span>
+                            <span className="text-xs font-bold text-white block">QRIS Instan (Saweria)</span>
                             <span className="text-[11px] text-emerald-400 flex items-center gap-1">
-                              <CheckCircle2 className="w-3 h-3" /> Verifikasi Otomatis 24 Jam
+                              <CheckCircle2 className="w-3 h-3" /> Bebas Biaya Admin • Semua E-Wallet &amp; Bank
                             </span>
                           </div>
                         </div>
-                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                          Sandbox Testing
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                          Rekomendasi
                         </span>
                       </div>
 
-                      <div>
-                        <span className="text-[11px] text-slate-400 block mb-1">Total Pembayaran:</span>
-                        <div className="text-2xl font-black text-amber-400">
-                          Rp {finalAmount.toLocaleString("id-ID")}
+                      {/* Official QR Code Card */}
+                      <div className="bg-white rounded-2xl p-4 text-center max-w-[270px] mx-auto shadow-xl">
+                        <div className="text-[10px] font-black text-slate-800 uppercase tracking-wider mb-2 flex items-center justify-center gap-1.5 border-b border-slate-200 pb-1.5">
+                          <QrCode className="w-3.5 h-3.5 text-slate-900" />
+                          <span>QRIS PEMBAYARAN NASIONAL</span>
                         </div>
-                        <span className="text-[11px] text-slate-300 block mt-1 leading-snug">
-                          Mendukung: <strong>QRIS</strong> (BCA Mobile, Livin, Gopay, OVO, ShopeePay), <strong>Virtual Account BCA / Mandiri / BNI / BRI</strong>, &amp; Kartu Kredit.
-                        </span>
+                        <img
+                          src="/saweria-qr.png"
+                          alt="QRIS Saweria Fransiskus Mahendra"
+                          className="w-52 h-52 mx-auto object-contain rounded-lg"
+                        />
+                        <div className="mt-2 pt-2 border-t border-slate-200">
+                          <span className="text-[10px] text-slate-500 block">Penerima Resmi:</span>
+                          <span className="text-xs font-black text-slate-900 block tracking-tight">
+                            Fransiskus Xaverius Mahendra
+                          </span>
+                          <span className="text-[10px] text-amber-600 font-bold block mt-0.5">
+                            Saweria • QRIS Nasional
+                          </span>
+                        </div>
                       </div>
 
-                      <button
-                        type="button"
-                        onClick={handleOpenMidtransSnap}
-                        disabled={isSnapOpening}
-                        className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-sm uppercase tracking-wider transition shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2"
-                      >
-                        {isSnapOpening ? (
-                          <>
-                            <Loader2 className="w-4 h-4 animate-spin" />
-                            Membuka Midtrans...
-                          </>
-                        ) : (
-                          <>
-                            <Zap className="w-4 h-4 fill-slate-950" />
-                            Bayar Sekarang via Midtrans ➔
-                          </>
-                        )}
-                      </button>
-                      <p className="text-[10px] text-center text-slate-400">
-                        *Klik tombol di atas untuk membuka popup Midtrans. Begitu Anda menyelesaikan transfer, status PRO langsung aktif.
-                      </p>
+                      {/* External links to live widget / web */}
+                      <div className="flex items-center justify-center gap-2 text-center pt-1">
+                        <a
+                          href="https://saweria.co/widgets/qr?streamKey=fac59d2df0d4f826f26ccf41d7db17f4"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[11px] text-amber-400 hover:text-amber-300 font-semibold inline-flex items-center gap-1 underline underline-offset-2"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          Buka Layar Penuh Widget QR
+                        </a>
+                        <span className="text-slate-600 text-xs">•</span>
+                        <a
+                          href="https://saweria.co/fransiskusmahendra"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[11px] text-amber-400 hover:text-amber-300 font-semibold inline-flex items-center gap-1 underline underline-offset-2"
+                        >
+                          Buka Web Saweria ➔
+                        </a>
+                      </div>
+
+                      {/* Nominal Box */}
+                      <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800">
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs text-slate-400 font-medium">Nominal Pembayaran:</span>
+                          <span className="text-[10px] text-amber-400 font-bold bg-amber-500/10 px-2 py-0.5 rounded">
+                            Paket {plan.title}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xl font-black text-amber-400 tracking-tight">
+                            Rp {finalAmount.toLocaleString("id-ID")}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => copyToClipboard(String(finalAmount), "nominal")}
+                            className="px-3 py-1.5 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 font-bold text-xs flex items-center gap-1 border border-amber-500/40 transition"
+                          >
+                            {copiedNominal ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                            {copiedNominal ? "Tersalin!" : "Salin Nominal"}
+                          </button>
+                        </div>
+                        <p className="text-[11px] text-slate-300 mt-2 leading-relaxed bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/60">
+                          💡 <strong>Cara Bayar:</strong> Buka aplikasi GoPay, OVO, Dana, ShopeePay, BCA Mobile, Livin, atau Mobile Banking &gt; Scan QR di atas &gt; Masukkan nominal <strong>Rp {finalAmount.toLocaleString("id-ID")}</strong> &gt; Tuliskan pesan / catatan: <code className="text-amber-300 font-mono font-bold">{orderId}</code>.
+                        </p>
+                      </div>
+
+                      {/* Confirmation WhatsApp Button */}
+                      <div className="space-y-2 pt-1">
+                        <button
+                          type="button"
+                          onClick={() => handleWhatsAppConfirm("QRIS Saweria")}
+                          className="w-full py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
+                        >
+                          <MessageSquare className="w-4 h-4" />
+                          Saya Sudah Bayar via QRIS (Kirim Bukti ke CS)
+                        </button>
+                        <p className="text-[11px] text-center text-slate-500">
+                          Kirim bukti transfer via WhatsApp untuk aktivasi instan akun PRO &amp; bot alert lelang Anda.
+                        </p>
+                      </div>
                     </div>
                   </div>
-                ) : (
+                ) : paymentMethod === "bca" ? (
                   /* METHOD 2: MANUAL BANK BCA TRANSFER */
                   <div className="space-y-4 mb-6">
                     <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
@@ -549,7 +620,7 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
                           </button>
                         </div>
                         <p className="text-[10px] text-slate-400 mt-1.5 leading-relaxed">
-                          *PENTING: Mohon transfer tepat hingga 3 digit terakhir untuk mempercepat verifikasi otomatis.
+                          *PENTING: Mohon transfer tepat hingga 3 digit terakhir untuk mempercepat verifikasi.
                         </p>
                       </div>
                     </div>
@@ -558,7 +629,7 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
                     <div className="space-y-2">
                       <button
                         type="button"
-                        onClick={handleWhatsAppConfirm}
+                        onClick={() => handleWhatsAppConfirm("Transfer Bank BCA")}
                         className="w-full py-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-sm uppercase tracking-wider transition flex items-center justify-center gap-2 shadow-lg shadow-emerald-500/20"
                       >
                         <MessageSquare className="w-4 h-4" />
@@ -566,6 +637,60 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
                       </button>
                       <p className="text-[11px] text-center text-slate-500">
                         Akun PRO dan bot alert WhatsApp Anda akan langsung diaktifkan setelah konfirmasi bukti transfer.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  /* METHOD 3: MIDTRANS SNAP PAYMENT GATEWAY */
+                  <div className="space-y-4 mb-6">
+                    <div className="p-5 rounded-2xl bg-gradient-to-br from-amber-500/15 via-orange-500/5 to-slate-950 border border-amber-500/30 space-y-4">
+                      <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
+                        <div className="flex items-center gap-2">
+                          <div className="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40 flex items-center justify-center font-black text-xs">
+                            <Zap className="w-4 h-4 text-amber-400" />
+                          </div>
+                          <div>
+                            <span className="text-xs font-bold text-white block">Midtrans Payment Gateway</span>
+                            <span className="text-[11px] text-emerald-400 flex items-center gap-1">
+                              <CheckCircle2 className="w-3 h-3" /> Verifikasi Otomatis 24 Jam
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                          Sandbox Testing
+                        </span>
+                      </div>
+
+                      <div>
+                        <span className="text-[11px] text-slate-400 block mb-1">Total Pembayaran:</span>
+                        <div className="text-2xl font-black text-amber-400">
+                          Rp {finalAmount.toLocaleString("id-ID")}
+                        </div>
+                        <span className="text-[11px] text-slate-300 block mt-1 leading-snug">
+                          Mendukung: <strong>QRIS</strong>, <strong>Virtual Account BCA / Mandiri / BNI / BRI</strong>, &amp; Kartu Kredit.
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleOpenMidtransSnap}
+                        disabled={isSnapOpening}
+                        className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-black text-sm uppercase tracking-wider transition shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2"
+                      >
+                        {isSnapOpening ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Membuka Midtrans...
+                          </>
+                        ) : (
+                          <>
+                            <Zap className="w-4 h-4 fill-slate-950" />
+                            Bayar Sekarang via Midtrans ➔
+                          </>
+                        )}
+                      </button>
+                      <p className="text-[10px] text-center text-slate-400">
+                        *Klik tombol di atas untuk membuka popup Midtrans. Begitu Anda menyelesaikan transfer, status PRO langsung aktif.
                       </p>
                     </div>
                   </div>
