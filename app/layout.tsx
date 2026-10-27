@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { FAQ_DATA } from "@/lib/faq-data";
+import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 
 export const viewport: Viewport = {
   themeColor: "#020617",
@@ -159,6 +160,12 @@ export default function RootLayout({
     <html lang="id" className="scroll-smooth">
       <head>
         <link rel="canonical" href="https://radartender.id" />
+        <link rel="manifest" href="/manifest.json" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="RadarTender" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script
@@ -180,6 +187,7 @@ export default function RootLayout({
       </head>
       <body className="bg-slate-950 text-slate-100 antialiased min-h-screen flex flex-col justify-between">
         {children}
+        <PWAInstallPrompt />
       </body>
     </html>
   );

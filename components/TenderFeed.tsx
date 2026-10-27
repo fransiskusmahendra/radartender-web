@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   getEnrichedTenders,
   formatRupiah,
@@ -22,6 +22,8 @@ import {
   Crown,
   FileText,
   Calendar,
+  Star,
+  Layers,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -97,11 +99,42 @@ export function TenderFeed({
   const [selectedUrgency, setSelectedUrgency] = useState("Semua Waktu");
   const [selectedHps, setSelectedHps] = useState("Semua Nilai Proyek");
   const [searchQuery, setSearchQuery] = useState("");
+  const [watchlist, setWatchlist] = useState<string[]>([]);
+  const [activeTab, setActiveTab] = useState<"all" | "watchlist">("all");
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("radartender_watchlist");
+      if (saved) setWatchlist(JSON.parse(saved));
+    } catch (e) {}
+  }, []);
+
+  const handleToggleWatchlist = (tenderId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (watchlist.includes(tenderId)) {
+      const next = watchlist.filter((id) => id !== tenderId);
+      setWatchlist(next);
+      localStorage.setItem("radartender_watchlist", JSON.stringify(next));
+    } else {
+      // Free account can save up to 1 tender
+      if (!isPro && watchlist.length >= 1) {
+        onOpenSubscribe();
+        return;
+      }
+      const next = [...watchlist, tenderId];
+      setWatchlist(next);
+      localStorage.setItem("radartender_watchlist", JSON.stringify(next));
+    }
+  };
 
   const tendersData = useMemo(() => getEnrichedTenders(), []);
 
   const filteredTenders = useMemo(() => {
     return tendersData.filter((item) => {
+      // Watchlist filter
+      if (activeTab === "watchlist" && !watchlist.includes(item.id)) {
+        return false;
+      }
       // Category match
       const matchCat =
         selectedCategory === "Semua Kluster" || item.procurement_type === selectedCategory;
@@ -156,7 +189,7 @@ export function TenderFeed({
 
       return matchCat && matchReg && matchUrg && matchHps && matchSearch;
     });
-  }, [tendersData, selectedCategory, selectedRegion, selectedUrgency, selectedHps, searchQuery]);
+  }, [tendersData, selectedCategory, selectedRegion, selectedUrgency, selectedHps, searchQuery, activeTab, watchlist]);
 
   const totalHpsSum = useMemo(() => {
     return filteredTenders.reduce((acc, curr) => acc + curr.hps_value, 0);
@@ -195,7 +228,7 @@ export function TenderFeed({
         </div>
 
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-slate-800">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-6 border-b border-slate-800">
           <div>
             <div className="inline-flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-2">
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
@@ -214,6 +247,34 @@ export function TenderFeed({
               {formatRupiah(totalHpsSum)}
             </span>
           </div>
+        </div>
+
+        {/* View Mode Tabs: All Tenders vs Watchlist */}
+        <div className="flex items-center gap-2 mb-6">
+          <button
+            type="button"
+            onClick={() => setActiveTab("all")}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 border ${
+              activeTab === "all"
+                ? "bg-amber-500 text-slate-950 border-amber-500 shadow-md shadow-amber-500/20"
+                : "bg-slate-900 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700"
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5" />
+            Semua Lelang ({tendersData.length})
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("watchlist")}
+            className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 border ${
+              activeTab === "watchlist"
+                ? "bg-amber-500 text-slate-950 border-amber-500 shadow-md shadow-amber-500/20"
+                : "bg-slate-900 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700"
+            }`}
+          >
+            <Star className={`w-3.5 h-3.5 ${watchlist.length > 0 ? "fill-amber-400 text-amber-400" : ""}`} />
+            Tender Tersimpan ({watchlist.length})
+          </button>
         </div>
 
         {/* Filter Toolbar (5 Columns including Region) */}
@@ -296,11 +357,30 @@ export function TenderFeed({
         {/* Tenders Grid */}
         {filteredTenders.length === 0 ? (
           <div className="text-center py-16 bg-slate-900/50 rounded-2xl border border-dashed border-slate-800">
-            <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto mb-3" />
-            <h3 className="text-lg font-bold text-white mb-1">Tidak Ada Paket Tender Ditemukan</h3>
-            <p className="text-sm text-slate-400">
-              Coba ganti filter kluster, wilayah, batas waktu, atau hapus kata kunci pencarian Anda.
-            </p>
+            {activeTab === "watchlist" ? (
+              <>
+                <Star className="w-10 h-10 text-amber-400/50 mx-auto mb-3" />
+                <h3 className="text-lg font-bold text-white mb-1">Belum Ada Tender di Watchlist</h3>
+                <p className="text-sm text-slate-400 max-w-md mx-auto mb-4">
+                  Klik tanda bintang (⭐) pada kartu tender untuk memantau paket lelang yang Anda incar di sini.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("all")}
+                  className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs"
+                >
+                  Lihat Semua Tender
+                </button>
+              </>
+            ) : (
+              <>
+                <AlertTriangle className="w-10 h-10 text-amber-400 mx-auto mb-3" />
+                <h3 className="text-lg font-bold text-white mb-1">Tidak Ada Paket Tender Ditemukan</h3>
+                <p className="text-sm text-slate-400">
+                  Coba ganti filter kluster, wilayah, batas waktu, atau hapus kata kunci pencarian Anda.
+                </p>
+              </>
+            )}
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -316,9 +396,23 @@ export function TenderFeed({
                   {/* Top badges */}
                   <div>
                     <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                      <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300">
-                        {tender.tender_code}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-mono font-bold px-2 py-0.5 rounded bg-slate-800 text-slate-300">
+                          {tender.tender_code}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => handleToggleWatchlist(tender.id, e)}
+                          title={watchlist.includes(tender.id) ? "Hapus dari Watchlist" : "Simpan ke Watchlist"}
+                          className={`p-1 rounded-lg border transition ${
+                            watchlist.includes(tender.id)
+                              ? "bg-amber-500/20 border-amber-500/50 text-amber-400"
+                              : "bg-slate-950/60 border-slate-800 text-slate-500 hover:text-amber-400 hover:border-slate-700"
+                          }`}
+                        >
+                          <Star className={`w-3.5 h-3.5 ${watchlist.includes(tender.id) ? "fill-amber-400" : ""}`} />
+                        </button>
+                      </div>
                       <span
                         className={`text-xs font-bold px-2.5 py-1 rounded-full flex items-center gap-1.5 ${
                           tender.urgency_badge === "urgent"
