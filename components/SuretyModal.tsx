@@ -209,11 +209,11 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
         const driveNote = driveUrl ? `\n*Folder Berkas:* ${driveUrl}` : "";
         const docsNote =
           docsCount > 0
-            ? `\n*Dokumen Terlampir:* ${docsCount} berkas underwriting (Legalitas, Keuangan, RKS/Tender)`
+            ? `\n*Dokumen Terlampir:* ${docsCount} berkas persyaratan (Legalitas, Keuangan, RKS/Tender)`
             : "";
 
         const waText = encodeURIComponent(
-          `Halo Tim Penjaminan RadarTender.id,\nSaya mengajukan penerbitan jaminan proyek:\n\n*Perusahaan:* ${companyName}\n*PIC:* ${contactPerson}\n*No WhatsApp:* ${whatsapp}\n*Jenis Jaminan:* ${guaranteeType}\n*Nilai Proyek:* ${formatRupiah(projectValue)}\n*Nilai Jaminan:* ${formatRupiah(bondValue)}\n*Pemilik Proyek (Obligee):* ${obligeeName || "-"}\n*Keterangan:* ${notes || "-"}${docsNote}${driveNote}\n\nMohon analisa underwriting dan siapkan draft penawarannya. Terima kasih!`
+          `Halo Tim Penjaminan RadarTender.id,\nSaya mengajukan penerbitan jaminan proyek:\n\n*Perusahaan:* ${companyName}\n*PIC:* ${contactPerson}\n*No WhatsApp:* ${whatsapp}\n*Jenis Jaminan:* ${guaranteeType}\n*Nilai Proyek:* ${formatRupiah(projectValue)}\n*Nilai Jaminan:* ${formatRupiah(bondValue)}\n*Pemilik Proyek (Obligee):* ${obligeeName || "-"}\n*Keterangan:* ${notes || "-"}${docsNote}${driveNote}\n\nMohon verifikasi persyaratan dan siapkan draft penawarannya. Terima kasih!`
         );
         setTimeout(() => {
           window.open(`https://wa.me/6281314620473?text=${waText}`, "_blank");
@@ -242,13 +242,13 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
             <div className="mb-6">
               <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4" />
-                Layanan Underwriting Asuransi &amp; Bank Garansi Resmi
+                Layanan Penerbitan Asuransi &amp; Bank Garansi Resmi
               </span>
               <h3 className="text-2xl sm:text-3xl font-black text-white mt-1">
                 Pengajuan Jaminan Proyek (Surety Bond)
               </h3>
               <p className="text-xs sm:text-sm text-slate-400 mt-1 leading-relaxed">
-                Lengkapi rincian proyek dan lampirkan dokumen persyaratan underwriting standar asuransi umum untuk penerbitan draft penjaminan express.
+                Lengkapi rincian proyek dan lampirkan dokumen persyaratan standar penerbitan penjaminan express.
               </p>
             </div>
 
@@ -405,7 +405,7 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                 <div className="flex items-center justify-between pb-2 border-b border-slate-800">
                   <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-200">
                     <FolderArchive className="w-4 h-4 text-emerald-400" />
-                    2. Berkas Underwriting Penjaminan (Standar Asuransi)
+                    2. Berkas Persyaratan Penerbitan Jaminan (Standar Asuransi)
                   </div>
                   <span className="text-[10px] text-slate-400 hidden sm:inline">
                     Format: PDF, JPG, PNG, ZIP (Maks. 15MB/file)
@@ -415,7 +415,7 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                 <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 text-xs flex items-start gap-2">
                   <ShieldCheck className="w-4 h-4 shrink-0 mt-0.5 text-emerald-400" />
                   <span>
-                    Dokumen underwriting diperlukan oleh analis asuransi umum &amp; bank devisa untuk memverifikasi kapasitas hukum, kesehatan keuangan, dan keabsahan paket lelang principal sebelum menerbitkan sertifikat penjaminan.
+                    Dokumen kelengkapan diperlukan oleh asuransi umum &amp; bank devisa untuk memverifikasi legalitas, keuangan, dan keabsahan paket lelang sebelum menerbitkan sertifikat penjaminan resmi.
                   </span>
                 </div>
 
@@ -698,17 +698,17 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
                   {loading ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      Memproses &amp; Meneruskan Dokumen ke Underwriter...
+                      Memproses &amp; Meneruskan Dokumen Persyaratan...
                     </>
                   ) : (
                     <>
                       <Send className="w-4 h-4" />
-                      Ajukan Jaminan &amp; Kirim Berkas Underwriting
+                      Ajukan Jaminan &amp; Kirim Berkas Persyaratan
                     </>
                   )}
                 </button>
                 <p className="text-center text-[11px] text-slate-500 mt-2">
-                  Setelah pengajuan terkirim, Anda akan otomatis terhubung ke WhatsApp underwriter kami untuk percepatan approval draft polis.
+                  Setelah pengajuan terkirim, Anda akan otomatis terhubung ke WhatsApp kami untuk percepatan penerbitan draft penjaminan.
                 </p>
               </div>
             </form>
@@ -719,10 +719,10 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
               <CheckCircle2 className="w-8 h-8" />
             </div>
             <h3 className="text-2xl sm:text-3xl font-black text-white mb-2">
-              Pengajuan &amp; Berkas Underwriting Diterima!
+              Pengajuan &amp; Berkas Persyaratan Diterima!
             </h3>
             <p className="text-xs sm:text-sm text-slate-300 max-w-lg mx-auto mb-6 leading-relaxed">
-              Data pokok proyek dan kelengkapan dokumen persyaratan underwriting Anda telah berhasil diteruskan ke tim underwriter. Jendela WhatsApp akan terbuka otomatis untuk konfirmasi dokumen dan koordinasi draf polis penjaminan.
+              Data pokok proyek dan kelengkapan dokumen persyaratan Anda telah berhasil diteruskan ke tim penjaminan. Jendela WhatsApp akan terbuka otomatis untuk konfirmasi dokumen dan koordinasi draf jaminan proyek.
             </p>
             <button
               onClick={onClose}

@@ -93,7 +93,7 @@ export function Footer() {
             </h4>
             <ul className="space-y-3 text-xs">
               <li>
-                <span className="text-slate-500 block mb-0.5">WhatsApp CS &amp; Underwriting:</span>
+                <span className="text-slate-500 block mb-0.5">WhatsApp CS &amp; Layanan Asistensi:</span>
                 <a
                   href="https://wa.me/6281314620473"
                   target="_blank"
