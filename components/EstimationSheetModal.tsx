@@ -44,7 +44,7 @@ export function EstimationSheetModal({ isOpen, onClose, data }: EstimationSheetM
     const text = encodeURIComponent(
       `Halo Tim Penjaminan RadarTender.id,\nSaya sudah mengunduh Lembar Simulasi Jaminan No: *${docNumber}*.\n\n*Proyek:* ${data.tenderTitle || "Proyek Konstruksi"}\n*Nilai HPS:* ${formatRupiah(projectValue)}\n*Perusahaan:* ${data.companyName || "-"}\n\nMohon bantu siapkan draft penawaran resmi dan cek persyaratannya. Terima kasih!`
     );
-    window.open(`https://wa.me/628211076517?text=${text}`, "_blank");
+    window.open(`https://wa.me/6281314620473?text=${text}`, "_blank");
   };
 
   return (

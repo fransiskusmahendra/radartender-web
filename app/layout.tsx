@@ -108,7 +108,8 @@ export default function RootLayout({
     },
     contactPoint: {
       "@type": "ContactPoint",
-      telephone: "+62-821-1076-517",
+      telephone: "+62-813-1462-0473",
+      email: "kontak@radartender.id",
       contactType: "customer service",
       areaServed: "ID",
       availableLanguage: ["Indonesian"],

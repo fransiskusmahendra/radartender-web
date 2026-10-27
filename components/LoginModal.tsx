@@ -376,7 +376,7 @@ export function LoginModal({
                     Daftar PRO Sekarang
                   </a>
                   <a
-                    href="https://wa.me/628211076517?text=Halo%20Admin%20RadarTender%2C%20saya%20sudah%20transfer%20dan%20ingin%20aktivasi%20nomor%20WhatsApp%20saya"
+                    href="https://wa.me/6281314620473?text=Halo%20Admin%20RadarTender%2C%20saya%20sudah%20transfer%20dan%20ingin%20aktivasi%20nomor%20WhatsApp%20saya"
                     target="_blank"
                     rel="noreferrer"
                     className="text-[10px] text-slate-300 hover:text-white underline inline-flex items-center gap-0.5"
@@ -415,7 +415,7 @@ export function LoginModal({
 
             <div className="pt-2 text-center">
               <a
-                href="https://wa.me/628211076517?text=Halo%20Admin%20RadarTender%2C%20saya%20butuh%20bantuan%20aktivasi%20akun%20PRO"
+                href="https://wa.me/6281314620473?text=Halo%20Admin%20RadarTender%2C%20saya%20butuh%20bantuan%20aktivasi%20akun%20PRO"
                 target="_blank"
                 rel="noreferrer"
                 className="text-[11px] text-slate-400 hover:text-amber-400 inline-flex items-center gap-1 transition"

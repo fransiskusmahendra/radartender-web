@@ -109,7 +109,7 @@ export function FAQSection() {
             </p>
           </div>
           <a
-            href="https://wa.me/628211076517?text=Halo%20Admin%20RadarTender%2C%20saya%20ingin%20konsultasi%20persyaratan%20lelang%20dan%20jaminan%20proyek"
+            href="https://wa.me/6281314620473?text=Halo%20Admin%20RadarTender%2C%20saya%20ingin%20konsultasi%20persyaratan%20lelang%20dan%20jaminan%20proyek"
             target="_blank"
             rel="noreferrer"
             className="px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shrink-0 shadow-lg shadow-amber-500/20"

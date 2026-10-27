@@ -188,7 +188,7 @@ export function SubscribeModal({ isOpen, onClose, initialPlan }: SubscribeModalP
     const waText = encodeURIComponent(
       `Halo Tim RadarTender.id,\nSaya sudah melakukan transfer pembayaran:\n\n*Order ID:* ${orderId}\n*Paket:* ${plan.title}\n*Nominal Transfer:* Rp ${finalAmount.toLocaleString("id-ID")}\n*Tujuan:* Bank BCA 4210122848 a/n Fransiskus Xaverius Mahendra Kotualubun\n*Perusahaan:* ${vendorName}\n*PIC:* ${vendorPic || "-"}\n*No WA:* ${vendorWa}\n\nBerikut bukti transfernya, mohon dibantu aktivasi notifikasi bot WhatsApp kami. Terima kasih!`
     );
-    window.open(`https://wa.me/628211076517?text=${waText}`, "_blank");
+    window.open(`https://wa.me/6281314620473?text=${waText}`, "_blank");
   };
 
   return (

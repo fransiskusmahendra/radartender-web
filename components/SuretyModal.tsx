@@ -216,7 +216,7 @@ export function SuretyModal({ isOpen, onClose, initialData }: SuretyModalProps) 
           `Halo Tim Penjaminan RadarTender.id,\nSaya mengajukan penerbitan jaminan proyek:\n\n*Perusahaan:* ${companyName}\n*PIC:* ${contactPerson}\n*No WhatsApp:* ${whatsapp}\n*Jenis Jaminan:* ${guaranteeType}\n*Nilai Proyek:* ${formatRupiah(projectValue)}\n*Nilai Jaminan:* ${formatRupiah(bondValue)}\n*Pemilik Proyek (Obligee):* ${obligeeName || "-"}\n*Keterangan:* ${notes || "-"}${docsNote}${driveNote}\n\nMohon analisa underwriting dan siapkan draft penawarannya. Terima kasih!`
         );
         setTimeout(() => {
-          window.open(`https://wa.me/628211076517?text=${waText}`, "_blank");
+          window.open(`https://wa.me/6281314620473?text=${waText}`, "_blank");
         }, 1200);
       }
     } catch (err) {

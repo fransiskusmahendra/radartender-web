@@ -199,14 +199,14 @@ export function activateSubscriptionByAdmin(
       orderId: cleanId,
       vendorName: "Member Kontraktor",
       contactPerson: "Estimator",
-      whatsapp: "628211076517",
+      whatsapp: "6281314620473",
       email: "",
       plan: cleanId.includes("VIP") ? "vip" : "pro",
       planTitle: cleanId.includes("VIP") ? "VIP Tahunan" : "Pro Kontraktor",
       amount: 199000,
       status: "pending_payment",
       createdAt: new Date().toISOString(),
-      token: generateToken(cleanId, "628211076517"),
+      token: generateToken(cleanId, "6281314620473"),
     };
   }
 
@@ -267,7 +267,7 @@ export async function authenticateContractor(
         orderId: cleanCode || cleanInput,
         vendorName: "VIP Member",
         contactPerson: "Partner",
-        whatsapp: normalizedPhone || "628211076517",
+        whatsapp: normalizedPhone || "6281314620473",
         email: "",
         plan: "vip",
         planTitle: "VIP Akses Penuh",
@@ -317,7 +317,7 @@ export async function authenticateContractor(
       orderId: orderKey,
       vendorName: "Member Kontraktor",
       contactPerson: "",
-      whatsapp: normalizedPhone || "628211076517",
+      whatsapp: normalizedPhone || "6281314620473",
       email: "",
       plan: "pro",
       planTitle: "Pro Kontraktor (3 Bulan)",
@@ -325,7 +325,7 @@ export async function authenticateContractor(
       status: "active",
       createdAt: new Date().toISOString(),
       expiresAt: futureDate.toISOString(),
-      token: generateToken(orderKey, normalizedPhone || "628211076517"),
+      token: generateToken(orderKey, normalizedPhone || "6281314620473"),
     };
     GLOBAL_SUBSCRIPTIONS.set(orderKey, record);
     GLOBAL_SUBSCRIPTIONS.set(record.whatsapp, record);
