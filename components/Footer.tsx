@@ -45,29 +45,29 @@ export function Footer() {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <a href="#radar-feed" className="hover:text-white transition">
+                <Link href="/#radar-feed" className="hover:text-white transition">
                   Radar Tender LPSE
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#kalkulator-jaminan" className="hover:text-white transition">
+                <Link href="/kalkulator" className="hover:text-white transition">
                   Kalkulator Jaminan Proyek
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#harga" className="hover:text-white transition">
+                <Link href="/harga" className="hover:text-white transition">
                   Paket Langganan Notifikasi
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#faq-lelang" className="hover:text-white transition">
+                <Link href="/#faq-lelang" className="hover:text-white transition">
                   Tanya Jawab &amp; FAQ
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#kepatuhan-ojk" className="hover:text-white transition">
+                <Link href="/#kepatuhan-ojk" className="hover:text-white transition">
                   SOP Kepatuhan Regulasi
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

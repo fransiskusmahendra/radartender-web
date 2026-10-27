@@ -61,21 +61,21 @@ export function Navbar({ onOpenSuretyModal, userProfile, onOpenLoginModal }: Nav
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-          <a href="#radar-feed" className="hover:text-amber-400 transition">
+          <Link href="/#radar-feed" className="hover:text-amber-400 transition">
             Radar Tender
-          </a>
-          <a href="#kalkulator-jaminan" className="hover:text-amber-400 transition">
+          </Link>
+          <Link href="/kalkulator" className="hover:text-amber-400 transition">
             Kalkulator Surety Bond
-          </a>
-          <a href="#harga" className="hover:text-amber-400 transition">
+          </Link>
+          <Link href="/harga" className="hover:text-amber-400 transition">
             Biaya Langganan
-          </a>
-          <a href="#faq-lelang" className="hover:text-amber-400 transition">
+          </Link>
+          <Link href="/#faq-lelang" className="hover:text-amber-400 transition">
             FAQ
-          </a>
-          <a href="#kepatuhan-ojk" className="hover:text-amber-400 transition">
+          </Link>
+          <Link href="/#kepatuhan-ojk" className="hover:text-amber-400 transition">
             Regulasi Penjaminan
-          </a>
+          </Link>
         </nav>
 
         {/* Action Button & Account Status */}
@@ -127,41 +127,41 @@ export function Navbar({ onOpenSuretyModal, userProfile, onOpenLoginModal }: Nav
       {/* Mobile dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden bg-slate-950 border-b border-slate-800 px-4 py-6 space-y-4">
-          <a
-            href="#radar-feed"
+          <Link
+            href="/#radar-feed"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-slate-200 hover:text-amber-400 font-medium"
           >
             Radar Tender
-          </a>
-          <a
-            href="#kalkulator-jaminan"
+          </Link>
+          <Link
+            href="/kalkulator"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-slate-200 hover:text-amber-400 font-medium"
           >
             Kalkulator Surety Bond
-          </a>
-          <a
-            href="#harga"
+          </Link>
+          <Link
+            href="/harga"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-slate-200 hover:text-amber-400 font-medium"
           >
             Biaya Langganan
-          </a>
-          <a
-            href="#faq-lelang"
+          </Link>
+          <Link
+            href="/#faq-lelang"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-slate-200 hover:text-amber-400 font-medium"
           >
             FAQ &amp; Tanya Jawab
-          </a>
-          <a
-            href="#kepatuhan-ojk"
+          </Link>
+          <Link
+            href="/#kepatuhan-ojk"
             onClick={() => setMobileMenuOpen(false)}
             className="block text-slate-200 hover:text-amber-400 font-medium"
           >
             Regulasi Penjaminan
-          </a>
+          </Link>
           <div className="pt-2 flex flex-col gap-2">
             <button
               onClick={() => {
