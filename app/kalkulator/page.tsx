@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Navbar, UserProfile } from "@/components/Navbar";
 import { SuretyCalculator } from "@/components/SuretyCalculator";
+import { QiraSynergyBanner } from "@/components/QiraSynergyBanner";
 import { ComplianceNotice } from "@/components/ComplianceNotice";
 import { Footer } from "@/components/Footer";
 import { SuretyModal } from "@/components/SuretyModal";
@@ -213,6 +214,8 @@ export default function KalkulatorPage() {
             </div>
           </div>
         </section>
+
+        <QiraSynergyBanner />
 
         <ComplianceNotice />
       </main>

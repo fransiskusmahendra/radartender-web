@@ -21,6 +21,7 @@ import {
   MessageCircle,
   Crown,
   FileText,
+  Calendar,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -55,6 +56,28 @@ const HPS_RANGES = [
   "Rp 10 Miliar - Rp 50 Miliar",
   "Mega Proyek (> Rp 50 Miliar)",
 ];
+
+function getGoogleCalendarUrl(tender: EnrichedTenderItem): string {
+  const title = encodeURIComponent(`[DEADLINE TENDER LPSE] ${tender.title}`);
+  const targetDate = new Date(Date.now() + Math.max(1, tender.days_remaining) * 24 * 60 * 60 * 1000);
+  const startStr = targetDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+  const endDate = new Date(targetDate.getTime() + 60 * 60 * 1000);
+  const endStr = endDate.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+  const details = encodeURIComponent(
+    `PENGINGAT BATAS DOKUMEN TENDER LPSE / BUMN\n\n` +
+    `• Paket Lelang: ${tender.title}\n` +
+    `• Kode Tender: ${tender.tender_code}\n` +
+    `• Instansi: ${tender.agency_name} (${tender.location})\n` +
+    `• Nilai HPS: ${formatRupiah(tender.hps_value)}\n` +
+    `• Portal Resmi: ${tender.source_url}\n` +
+    `• Asistensi Surety Bond: https://radartender.id/kalkulator\n\n` +
+    `Pastikan dokumen penawaran teknis, harga, dan jaminan proyek telah ter-upload sebelum batas akhir!`
+  );
+  const location = encodeURIComponent(`${tender.agency_name}, ${tender.location}`);
+
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startStr}/${endStr}&details=${details}&location=${location}`;
+}
 
 interface TenderFeedProps {
   onSelectTenderForSurety: (tender: EnrichedTenderItem) => void;
@@ -415,6 +438,17 @@ export function TenderFeed({
                       <FileText className="w-3.5 h-3.5" />
                       Draf PDF
                     </button>
+
+                    <a
+                      href={getGoogleCalendarUrl(tender)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      title="Pasang Alarm Pengingat Batas Upload Dokumen ke Google Calendar / HP"
+                      className="py-2.5 px-3 rounded-xl bg-slate-950 hover:bg-slate-800 text-cyan-400 font-semibold text-xs flex items-center justify-center gap-1 transition border border-slate-800"
+                    >
+                      <Calendar className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">Ingatkan</span>
+                    </a>
 
                     <a
                       href={tender.source_url}

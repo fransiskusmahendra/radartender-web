@@ -5,6 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { TenderFeed } from "@/components/TenderFeed";
 import { SuretyCalculator } from "@/components/SuretyCalculator";
+import { QiraSynergyBanner } from "@/components/QiraSynergyBanner";
 import { PricingSection } from "@/components/PricingSection";
 import { FAQSection } from "@/components/FAQSection";
 import { ComplianceNotice } from "@/components/ComplianceNotice";
@@ -238,6 +239,8 @@ export default function HomePage() {
           onOpenSuretyModalWithData={handleOpenSuretyWithCustomData}
           onOpenEstimationModal={handleOpenEstimation}
         />
+
+        <QiraSynergyBanner />
 
         <PricingSection onSelectPlan={(plan) => handleOpenSubscribe(plan)} />
 

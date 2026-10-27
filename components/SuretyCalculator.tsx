@@ -10,6 +10,7 @@ import {
   Building,
   Send,
   FileText,
+  MessageSquare,
 } from "lucide-react";
 
 interface SuretyCalculatorProps {
@@ -290,6 +291,25 @@ export function SuretyCalculator({ onOpenSuretyModalWithData, onOpenEstimationMo
                 <FileText className="w-4 h-4 text-amber-400" />
                 📄 Download Draf Estimasi Resmi (PDF)
               </button>
+
+              {/* Instant WhatsApp Lead Capture */}
+              <a
+                href={`https://wa.me/6281314620473?text=${encodeURIComponent(
+                  `Halo Tim Penjaminan RadarTender,\n\n` +
+                  `Saya ingin konsultasi persyaratan dan penerbitan jaminan proyek:\n` +
+                  `• Jenis: ${getBondTypeName()} (${institutionType === "surety" ? "Surety Bond Asuransi" : "Bank Garansi Devisa"})\n` +
+                  `• Nilai Proyek: ${formatRupiah(projectValue)}\n` +
+                  `• Nilai Jaminan (${bondPercentage}%): ${formatRupiah(calculatedBondValue)}\n` +
+                  `• Estimasi Premi: ${formatRupiah(estimatedPremiumLow)} s/d ${formatRupiah(estimatedPremiumHigh)}\n\n` +
+                  `Mohon informasi kelengkapan berkas dan jalur prioritas proses 1-2 hari kerjanya. Terima kasih!`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 text-emerald-400 font-bold text-xs flex items-center justify-center gap-1.5 transition"
+              >
+                <MessageSquare className="w-4 h-4 text-emerald-400" />
+                💬 Kirim Estimasi ini ke WhatsApp CS Penjaminan
+              </a>
             </div>
             <p className="text-[11px] text-center text-slate-500">
               Konsultasi langsung dengan tim fasilitator penjaminan terpercaya. Respon cepat &lt; 15 menit.
