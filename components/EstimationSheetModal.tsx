@@ -228,6 +228,19 @@ export function EstimationSheetModal({ isOpen, onClose, data }: EstimationSheetM
             Kirim ke WhatsApp Tim Penjaminan
           </button>
         </div>
+
+        {/* E-Sign Partner Tip */}
+        <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400 print:hidden">
+          <span>✍️ Butuh tanda tangan digital instan untuk dokumen SPK / RKS lelang?</span>
+          <a
+            href="https://tekenin.my.id"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-amber-400 hover:text-amber-300 font-semibold underline underline-offset-2 shrink-0 ml-2"
+          >
+            Teken Dokumen di Tekenin.my.id ➔
+          </a>
+        </div>
       </div>
     </div>
   );

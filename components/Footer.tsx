@@ -22,7 +22,7 @@ export function Footer() {
             <p className="text-xs text-slate-400 leading-relaxed">
               Platform intelijen pengadaan lelang nasional terintegrasi simulasi &amp; asistensi penerbitan Surety Bond serta Bank Garansi resmi.
             </p>
-            <div className="pt-2">
+            <div className="pt-2 space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-[11px] text-slate-300">
                 <span>⚡ Engineered by</span>
                 <a
@@ -33,6 +33,18 @@ export function Footer() {
                 >
                   Qira Solution
                   <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+              <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                <span>✍️ E-Sign Kontrak &amp; SPK:</span>
+                <a
+                  href="https://tekenin.my.id"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-amber-400 hover:underline flex items-center gap-0.5"
+                >
+                  Tekenin.my.id
+                  <ExternalLink className="w-2.5 h-2.5" />
                 </a>
               </div>
             </div>

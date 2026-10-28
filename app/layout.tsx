@@ -74,6 +74,9 @@ export const metadata: Metadata = {
     description:
       "Agregasi ratusan lelang konstruksi & BUMN se-Indonesia dengan hitung mundur batas penawaran dan kalkulator jaminan proyek.",
   },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || "google-site-verification-radartender",
+  },
   category: "Business & Procurement Intelligence",
 };
 
