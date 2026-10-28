@@ -194,7 +194,9 @@ export function TenderCategoryClient({ config }: TenderCategoryClientProps) {
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}
-        onLoginSuccess={(profile) => setUserProfile(profile)}
+        userProfile={userProfile}
+        onSaveProfile={(profile) => setUserProfile(profile)}
+        onOpenSubscribe={() => handleOpenSubscribe()}
       />
     </>
   );
