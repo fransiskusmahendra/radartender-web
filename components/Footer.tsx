@@ -84,17 +84,37 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Produk Penjaminan */}
+          {/* Kategori Tender Populer */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-200 mb-4">
-              Produk Penjaminan
+              Kategori Tender Populer
             </h4>
             <ul className="space-y-2 text-xs">
-              <li>Jaminan Penawaran (Bid Bond)</li>
-              <li>Jaminan Pelaksanaan (Performance)</li>
-              <li>Jaminan Uang Muka (Advance Payment)</li>
-              <li>Jaminan Pemeliharaan (Maintenance)</li>
-              <li>Kontra Bank Garansi Devisa</li>
+              <li>
+                <Link href="/tender/ikn" className="hover:text-amber-400 transition">
+                  Tender IKN &amp; Kalimantan
+                </Link>
+              </li>
+              <li>
+                <Link href="/tender/konstruksi" className="hover:text-amber-400 transition">
+                  Tender Konstruksi Fisik
+                </Link>
+              </li>
+              <li>
+                <Link href="/tender/pengadaan-barang" className="hover:text-amber-400 transition">
+                  Tender Pengadaan Barang
+                </Link>
+              </li>
+              <li>
+                <Link href="/tender/jasa-konsultansi" className="hover:text-amber-400 transition">
+                  Tender Jasa Konsultansi
+                </Link>
+              </li>
+              <li>
+                <Link href="/tender/dki-jakarta" className="hover:text-amber-400 transition">
+                  Tender DKI Jakarta
+                </Link>
+              </li>
             </ul>
           </div>
 

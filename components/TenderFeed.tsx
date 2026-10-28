@@ -86,6 +86,9 @@ interface TenderFeedProps {
   isPro?: boolean;
   onOpenSubscribe: () => void;
   onOpenEstimationModal: (data: any) => void;
+  initialCategory?: string;
+  initialRegion?: string;
+  initialSearch?: string;
 }
 
 export function TenderFeed({
@@ -93,12 +96,15 @@ export function TenderFeed({
   isPro,
   onOpenSubscribe,
   onOpenEstimationModal,
+  initialCategory,
+  initialRegion,
+  initialSearch,
 }: TenderFeedProps) {
-  const [selectedCategory, setSelectedCategory] = useState("Semua Kluster");
-  const [selectedRegion, setSelectedRegion] = useState("Semua Wilayah");
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory || "Semua Kluster");
+  const [selectedRegion, setSelectedRegion] = useState(initialRegion || "Semua Wilayah");
   const [selectedUrgency, setSelectedUrgency] = useState("Semua Waktu");
   const [selectedHps, setSelectedHps] = useState("Semua Nilai Proyek");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(initialSearch || "");
   const [watchlist, setWatchlist] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState<"all" | "watchlist">("all");
 
