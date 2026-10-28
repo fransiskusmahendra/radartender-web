@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import { PROGRAMMATIC_PAGES } from "@/lib/programmatic-seo";
-import { TenderCategoryClient } from "../TenderCategoryClient";
+import { TenderCategoryClient } from "@/components/TenderCategoryClient";
 
 const config = PROGRAMMATIC_PAGES["konstruksi"];
 
