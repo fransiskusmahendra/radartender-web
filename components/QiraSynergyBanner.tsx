@@ -14,7 +14,7 @@ import {
 
 export function QiraSynergyBanner() {
   const waConsultUrl =
-    "https://wa.me/6281314620473?text=" +
+    "https://wa.me/628211076517?text=" +
     encodeURIComponent(
       "Halo Pak Mahendra (Qira Solution), saya kontraktor dari RadarTender.id ingin berdiskusi seputar kebutuhan pembuatan sistem monitoring proyek lapangan kustom untuk perusahaan kami."
     );
