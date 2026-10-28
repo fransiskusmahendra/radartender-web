@@ -64,6 +64,15 @@ export function TenderCategoryClient({ config }: TenderCategoryClientProps) {
     } catch (e) {}
   }, []);
 
+  const handleOpenSuretyWithCustomData = (data: {
+    guaranteeType: string;
+    projectValue: number;
+    bondValue: number;
+  }) => {
+    setSuretyInitialData(data);
+    setIsSuretyModalOpen(true);
+  };
+
   const handleSelectTenderForSurety = (tender: EnrichedTenderItem) => {
     setSuretyInitialData({
       tenderTitle: tender.title,
@@ -162,7 +171,7 @@ export function TenderCategoryClient({ config }: TenderCategoryClientProps) {
         {/* Calculator Widget & Synergy */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-12">
           <SuretyCalculator
-            onOpenSuretyModal={() => setIsSuretyModalOpen(true)}
+            onOpenSuretyModalWithData={handleOpenSuretyWithCustomData}
             onOpenEstimationModal={handleOpenEstimation}
           />
           <QiraSynergyBanner />
