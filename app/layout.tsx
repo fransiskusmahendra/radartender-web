@@ -119,6 +119,9 @@ export default function RootLayout({
       availableLanguage: ["Indonesian"],
     },
     sameAs: [
+      "https://www.qirasolution.com",
+      "https://tekenin.my.id",
+      "https://tembusin.my.id",
       "https://www.linkedin.com/company/radartender",
       "https://www.instagram.com/radartender.id",
     ],

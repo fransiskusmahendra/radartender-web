@@ -35,17 +35,31 @@ export function Footer() {
                   <ExternalLink className="w-3 h-3" />
                 </a>
               </div>
-              <div className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                <span>✍️ E-Sign Kontrak &amp; SPK:</span>
-                <a
-                  href="https://tekenin.my.id"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-amber-400 hover:underline flex items-center gap-0.5"
-                >
-                  Tekenin.my.id
-                  <ExternalLink className="w-2.5 h-2.5" />
-                </a>
+              <div className="space-y-1.5 text-[11px] text-slate-400">
+                <div className="flex items-center gap-1.5">
+                  <span>✍️ E-Sign Dokumen &amp; SPK:</span>
+                  <a
+                    href="https://tekenin.my.id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-amber-400 hover:underline flex items-center gap-0.5"
+                  >
+                    Tekenin.my.id
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span>📄 CV ATS Tenaga Ahli:</span>
+                  <a
+                    href="https://tembusin.my.id"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-amber-400 hover:underline flex items-center gap-0.5"
+                  >
+                    Tembusin.my.id
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
